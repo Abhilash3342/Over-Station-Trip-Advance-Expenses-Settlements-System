@@ -1,4 +1,14 @@
-export const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '' : 'https://over-station-trip-advance-expenses-settlements-system.onrender.com');
+const productionApiUrl = import.meta.env.VITE_API_URL;
+
+if (!import.meta.env.DEV && !productionApiUrl) {
+  throw new Error(
+    'VITE_API_URL is not configured for production. Set VITE_API_URL to the deployed backend URL before building the frontend.'
+  );
+}
+
+export const API_URL = import.meta.env.DEV
+  ? ''
+  : productionApiUrl;
 
 const request = async (method, path, body = null, isMultipart = false) => {
   const token = localStorage.getItem('token');
@@ -38,6 +48,15 @@ const request = async (method, path, body = null, isMultipart = false) => {
 
     return data;
   } catch (error) {
+    if (!import.meta.env.DEV && error instanceof Error && error.message === 'Failed to fetch') {
+      const backendError = new Error(
+        `Unable to connect to the backend API at ${API_URL}. ` +
+        `Please ensure the backend is deployed and CORS is configured for this origin.`
+      );
+      console.error(`API Error on ${method} ${path}:`, backendError);
+      throw backendError;
+    }
+
     console.error(`API Error on ${method} ${path}:`, error);
     throw error;
   }

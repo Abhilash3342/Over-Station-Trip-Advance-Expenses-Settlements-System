@@ -7,10 +7,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "cross-env VITE_API_URL=https://your-backend-url.com vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "deploy:prod": "cross-env VITE_API_URL=https://your-backend-url.com npm run deploy",
+    "deploy:ci": "cross-env VITE_API_URL=$VITE_API_URL npm run deploy"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
@@ -26,6 +29,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "cross-env": "^7.0.3",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",

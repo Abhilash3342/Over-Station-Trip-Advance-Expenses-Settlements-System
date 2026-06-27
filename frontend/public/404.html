@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Page not found</title>
+    <script>
+      const repoBase = '/Over-Station-Trip-Advance-Expenses-Settlements-System';
+      let path = window.location.pathname;
+      let target = path;
+
+      if (path.startsWith(repoBase)) {
+        target = path.slice(repoBase.length) || '/';
+      }
+
+      const hashRoute = target === '/' ? '/#/' : '/#' + target;
+      const redirectRoot = path.startsWith(repoBase) ? repoBase : '';
+      window.location.replace(redirectRoot + hashRoute + window.location.search);
+    </script>
+  </head>
+  <body>
+    Redirecting to the application...
+  </body>
+</html>
