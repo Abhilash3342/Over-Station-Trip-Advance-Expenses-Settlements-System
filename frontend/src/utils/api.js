@@ -1,5 +1,4 @@
-const API_URL = ''; // Proxy handles routing relative requests starting with /api
-
+const API_URL = 'https://over-station-trip-advance-expenses.onrender.com';
 const request = async (method, path, body = null, isMultipart = false) => {
   const token = localStorage.getItem('token');
   const headers = {};
