@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../utils/api';
+import api, { API_URL } from '../../utils/api';
 import { formatDate, formatCurrency, getStatusColor } from '../../utils/formatters';
 import { Check, X, ShieldAlert, Award, FileText, ArrowRightLeft, XCircle, Landmark, RefreshCw } from 'lucide-react';
 
@@ -286,7 +286,11 @@ const Settlements = () => {
                 </label>
                 <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-zinc-800 dark:bg-zinc-950">
                   <img 
-                    src={`https://over-station-trip-advance-expenses.onrender.com/uploads/${selectedSettlement.receipt}`} 
+                    src={
+                      selectedSettlement.receipt.startsWith('http')
+                        ? selectedSettlement.receipt
+                        : `${API_URL}/uploads/${selectedSettlement.receipt}`
+                    }
                     alt="Receipt upload" 
                     className="max-h-[250px] w-full object-contain mx-auto p-2"
                     onError={(e) => { e.target.style.display = 'none'; }}

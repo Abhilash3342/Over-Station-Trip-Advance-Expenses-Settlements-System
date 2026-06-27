@@ -151,13 +151,13 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="h-80 w-full">
+          <div className="h-80 w-full min-h-[320px]" style={{ minHeight: 320 }}>
             {trends.length === 0 ? (
               <div className="flex h-full items-center justify-center text-sm text-slate-400">
                 No trends data available.
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={320}>
                 <AreaChart data={trends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorAdvances" x1="0" y1="0" x2="0" y2="1">
@@ -191,11 +191,11 @@ const AdminDashboard = () => {
             <p className="text-xs font-medium text-slate-400 dark:text-zinc-500">Breakdown of approved trip expenses.</p>
           </div>
 
-          <div className="relative flex h-80 flex-col items-center justify-center">
+          <div className="relative flex h-80 w-full min-h-[320px] flex-col items-center justify-center" style={{ minHeight: 320 }}>
             {stats?.categoryBreakdown?.length === 0 ? (
               <div className="text-sm text-slate-400">No expenses recorded yet.</div>
             ) : (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={320}>
                 <PieChart>
                   <Pie
                     data={stats?.categoryBreakdown || []}

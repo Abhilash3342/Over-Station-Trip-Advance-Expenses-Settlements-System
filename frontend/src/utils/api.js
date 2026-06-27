@@ -1,4 +1,4 @@
-const API_URL = 'https://over-station-trip-advance-expenses-settlements-system.onrender.com';
+export const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '' : 'https://over-station-trip-advance-expenses-settlements-system.onrender.com');
 
 const request = async (method, path, body = null, isMultipart = false) => {
   const token = localStorage.getItem('token');
