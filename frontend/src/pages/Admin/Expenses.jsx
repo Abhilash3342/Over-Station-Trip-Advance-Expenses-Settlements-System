@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../utils/api';
+import api, { API_URL } from '../../utils/api'; // Imported API_URL from your utils configuration
 import { formatDate, formatCurrency, capitalize } from '../../utils/formatters';
 import { Eye, Check, X, FileImage, ClipboardList, RefreshCw } from 'lucide-react';
 
@@ -61,139 +61,138 @@ const Expenses = () => {
     <>
       <div className="space-y-8 animate-fade-in">
       
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Expense Verification</h1>
-          <p className="text-sm font-medium text-slate-400 dark:text-zinc-500">
-            Verify driver claims, inspect receipt images, and approve travel costs.
-          </p>
+        {/* Header */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Expense Verification</h1>
+            <p className="text-sm font-medium text-slate-400 dark:text-zinc-500">
+              Verify driver claims, inspect receipt images, and approve travel costs.
+            </p>
+          </div>
+          <button
+            onClick={() => { setLoading(true); fetchPendingExpenses(); }}
+            className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 transition-colors"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Refresh List
+          </button>
         </div>
-        <button
-          onClick={() => { setLoading(true); fetchPendingExpenses(); }}
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 transition-colors"
-        >
-          <RefreshCw className="h-4 w-4" />
-          Refresh List
-        </button>
-      </div>
 
-      {error && (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-600 dark:border-rose-950/30 dark:bg-rose-950/10 dark:text-rose-400">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-600 dark:border-rose-950/30 dark:bg-rose-950/10 dark:text-rose-400">
+            {error}
+          </div>
+        )}
 
-      {/* Main List */}
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-premium dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-slate-100 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-400 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-500">
-                <th className="px-6 py-4">Driver & Destination</th>
-                <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4">Claim Date</th>
-                <th className="px-6 py-4">Amount</th>
-                <th className="px-6 py-4">Description</th>
-                <th className="px-6 py-4">Receipt</th>
-                <th className="px-6 py-4">Verification Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
-              {expenses.length === 0 ? (
-                <tr>
-                  <td colSpan="7" className="px-6 py-12 text-center text-slate-400">
-                    <ClipboardList className="mx-auto h-10 w-10 stroke-1 mb-3 text-slate-300 dark:text-zinc-700" />
-                    All driver expenses verified! No pending items.
-                  </td>
+        {/* Main List */}
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-premium dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-slate-100 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-400 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-500">
+                  <th className="px-6 py-4">Driver & Destination</th>
+                  <th className="px-6 py-4">Category</th>
+                  <th className="px-6 py-4">Claim Date</th>
+                  <th className="px-6 py-4">Amount</th>
+                  <th className="px-6 py-4">Description</th>
+                  <th className="px-6 py-4">Receipt</th>
+                  <th className="px-6 py-4">Verification Actions</th>
                 </tr>
-              ) : (
-                expenses.map((expense) => (
-                  <tr 
-                    key={expense.id}
-                    className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/20 transition-colors"
-                  >
-                    {/* Driver Name & Trip Destination */}
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-slate-800 dark:text-zinc-200">
-                          {expense.trip?.driver?.name || 'Unknown Driver'}
-                        </span>
-                        <span className="text-xs font-medium text-slate-400">
-                          To {expense.trip?.destination || 'N/A'}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* Category */}
-                    <td className="px-6 py-4">
-                      <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600 dark:bg-zinc-800 dark:text-zinc-300">
-                        {capitalize(expense.category)}
-                      </span>
-                    </td>
-
-                    {/* Date */}
-                    <td className="px-6 py-4 font-medium text-slate-500 dark:text-zinc-400">
-                      {formatDate(expense.date)}
-                    </td>
-
-                    {/* Amount */}
-                    <td className="px-6 py-4 font-bold text-slate-800 dark:text-zinc-100">
-                      {formatCurrency(expense.amount)}
-                    </td>
-
-                    {/* Description */}
-                    <td className="px-6 py-4 max-w-xs truncate text-xs font-medium text-slate-500 dark:text-zinc-400">
-                      {expense.description || 'No description provided'}
-                    </td>
-
-                    {/* Receipt Preview */}
-                    <td className="px-6 py-4">
-                      {expense.receiptUrl ? (
-                        <button
-                          onClick={() => handleOpenPreview(expense)}
-                          className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50/50 px-2.5 py-1.5 text-xs font-bold text-blue-600 hover:bg-blue-100 dark:border-blue-900/50 dark:bg-blue-950/20 dark:text-blue-400 transition-all"
-                        >
-                          <Eye className="h-3.5 w-3.5" />
-                          View Receipt
-                        </button>
-                      ) : (
-                        <span className="flex items-center gap-1 text-xs text-slate-400 font-medium">
-                          <FileImage className="h-3.5 w-3.5 text-slate-300" />
-                          No Bill
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Verification Action Buttons */}
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          disabled={actioningId === expense.id}
-                          onClick={() => handleVerifyExpense(expense.id, 'approved')}
-                          className="rounded-xl bg-emerald-600 p-2 text-white hover:bg-emerald-700 active:scale-[0.95] disabled:opacity-50 transition-all shadow-md shadow-emerald-600/10"
-                          title="Approve Expense"
-                        >
-                          <Check className="h-4 w-4" />
-                        </button>
-                        <button
-                          disabled={actioningId === expense.id}
-                          onClick={() => handleVerifyExpense(expense.id, 'rejected')}
-                          className="rounded-xl bg-rose-600 p-2 text-white hover:bg-rose-700 active:scale-[0.95] disabled:opacity-50 transition-all shadow-md shadow-rose-600/10"
-                          title="Reject Expense"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+                {expenses.length === 0 ? (
+                  <tr key="empty-state">
+                    <td colSpan="7" className="px-6 py-12 text-center text-slate-400">
+                      <ClipboardList className="mx-auto h-10 w-10 stroke-1 mb-3 text-slate-300 dark:text-zinc-700" />
+                      All driver expenses verified! No pending items.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  expenses.map((expense) => (
+                    <tr 
+                      key={expense.id}
+                      className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/20 transition-colors"
+                    >
+                      {/* Driver Name & Trip Destination */}
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-slate-800 dark:text-zinc-200">
+                            {expense.trip?.driver?.name || 'Unknown Driver'}
+                          </span>
+                          <span className="text-xs font-medium text-slate-400">
+                            To {expense.trip?.destination || 'N/A'}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Category */}
+                      <td className="px-6 py-4">
+                        <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600 dark:bg-zinc-800 dark:text-zinc-300">
+                          {capitalize(expense.category)}
+                        </span>
+                      </td>
+
+                      {/* Date */}
+                      <td className="px-6 py-4 font-medium text-slate-500 dark:text-zinc-400">
+                        {formatDate(expense.date)}
+                      </td>
+
+                      {/* Amount */}
+                      <td className="px-6 py-4 font-bold text-slate-800 dark:text-zinc-100">
+                        {formatCurrency(expense.amount)}
+                      </td>
+
+                      {/* Description */}
+                      <td className="px-6 py-4 max-w-xs truncate text-xs font-medium text-slate-500 dark:text-zinc-400">
+                        {expense.description || 'No description provided'}
+                      </td>
+
+                      {/* Receipt Preview */}
+                      <td className="px-6 py-4">
+                        {expense.receiptUrl ? (
+                          <button
+                            onClick={() => handleOpenPreview(expense)}
+                            className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50/50 px-2.5 py-1.5 text-xs font-bold text-blue-600 hover:bg-blue-100 dark:border-blue-900/50 dark:bg-blue-950/20 dark:text-blue-400 transition-all"
+                          >
+                            <Eye className="h-3.5 w-3.5" />
+                            View Receipt
+                          </button>
+                        ) : (
+                          <span className="flex items-center gap-1 text-xs text-slate-400 font-medium">
+                            <FileImage className="h-3.5 w-3.5 text-slate-300" />
+                            No Bill
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Verification Action Buttons */}
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button
+                            disabled={actioningId === expense.id}
+                            onClick={() => handleVerifyExpense(expense.id, 'approved')}
+                            className="rounded-xl bg-emerald-600 p-2 text-white hover:bg-emerald-700 active:scale-[0.95] disabled:opacity-50 transition-all shadow-md shadow-emerald-600/10"
+                            title="Approve Expense"
+                          >
+                            <Check className="h-4 w-4" />
+                          </button>
+                          <button
+                            disabled={actioningId === expense.id}
+                            onClick={() => handleVerifyExpense(expense.id, 'rejected')}
+                            className="rounded-xl bg-rose-600 p-2 text-white hover:bg-rose-700 active:scale-[0.95] disabled:opacity-50 transition-all shadow-md shadow-rose-600/10"
+                            title="Reject Expense"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-      {/* End of animate-fade-in wrapper */}
       </div>
 
       {/* Receipt Image Preview Dialog */}
@@ -219,7 +218,10 @@ const Expenses = () => {
             {/* Receipt Image Container */}
             <div className="flex max-h-96 items-center justify-center rounded-xl bg-slate-100 p-4 dark:bg-zinc-950 border border-slate-200/50 dark:border-zinc-800 overflow-hidden">
               <img
-                src={previewExpense.receiptUrl}
+                src={previewExpense.receiptUrl?.startsWith('http') 
+                  ? previewExpense.receiptUrl 
+                  : `${API_URL}/${previewExpense.receiptUrl}`
+                }
                 alt="Receipt upload"
                 className="max-h-80 w-auto max-w-full rounded-lg object-contain shadow-sm"
               />
@@ -254,7 +256,6 @@ const Expenses = () => {
           </div>
         </div>
       )}
-
     </>
   );
 };

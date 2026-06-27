@@ -1,4 +1,5 @@
-const API_URL = 'https://over-station-trip-advance-expenses.onrender.com';
+const API_URL = 'https://over-station-trip-advance-expenses-settlements-system.onrender.com';
+
 const request = async (method, path, body = null, isMultipart = false) => {
   const token = localStorage.getItem('token');
   const headers = {};
@@ -22,6 +23,13 @@ const request = async (method, path, body = null, isMultipart = false) => {
 
   try {
     const res = await fetch(`${API_URL}${path}`, config);
+    
+    // Safety check: if server responds with HTML instead of JSON (like a 404 or 502 page)
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error(`Server returned non-JSON response (${res.status}). Check server logs.`);
+    }
+
     const data = await res.json();
 
     if (!res.ok) {
@@ -65,7 +73,7 @@ const api = {
     updateStatus: (id, status) => request('PUT', `/api/trips/${id}/status`, { status }),
   },
   expenses: {
-    create: (formData) => request('POST', '/api/expenses', formData, true), // Multipart
+    create: (formData) => request('POST', '/api/expenses', formData, true),
     listPending: () => request('GET', '/api/expenses/pending'),
     updateStatus: (id, status) => request('PUT', `/api/expenses/${id}/status`, { status }),
     delete: (id) => request('DELETE', `/api/expenses/${id}`),
