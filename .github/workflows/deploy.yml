@@ -29,6 +29,11 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.FRONTEND_API_URL }}
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
       - name: Deploy to GitHub Pages
         run: |
           cd frontend
