@@ -265,44 +265,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions Card */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-premium card-interactive dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between">
-          <div>
-            <h2 className="text-lg font-bold mb-1">Administrative Actions</h2>
-            <p className="text-xs font-medium text-slate-400 dark:text-zinc-500 mb-6">Quick shortcuts to critical functions.</p>
-            
-            <div className="space-y-3">
-              <button 
-                onClick={() => window.location.href = '/admin/trips'}
-                className="flex w-full items-center justify-between rounded-xl border border-slate-200 p-3 text-sm font-semibold hover:bg-slate-50 btn-interactive dark:border-zinc-800 dark:hover:bg-zinc-800/40 transition-colors"
-              >
-                <span>Create & Assign a Trip</span>
-                <ArrowRight className="h-4 w-4 text-blue-500" />
-              </button>
-              <button 
-                onClick={() => window.location.href = '/admin/drivers'}
-                className="flex w-full items-center justify-between rounded-xl border border-slate-200 p-3 text-sm font-semibold hover:bg-slate-50 btn-interactive dark:border-zinc-800 dark:hover:bg-zinc-800/40 transition-colors"
-              >
-                <span>Add Driver Profile</span>
-                <ArrowRight className="h-4 w-4 text-blue-500" />
-              </button>
-              <button 
-                onClick={() => window.location.href = '/admin/expenses'}
-                className="flex w-full items-center justify-between rounded-xl border border-slate-200 p-3 text-sm font-semibold hover:bg-slate-50 btn-interactive dark:border-zinc-800 dark:hover:bg-zinc-800/40 transition-colors"
-              >
-                <span>Verify Pending Receipts</span>
-                <ArrowRight className="h-4 w-4 text-blue-500" />
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-6 border-t border-slate-100 pt-4 text-center dark:border-zinc-800">
-            <span className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest">
-              Manivtha Tours & Travels • 2026
-            </span>
-          </div>
-        </div>
-
       </div>
 
     </div>
