@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 
 const AuthContext = createContext(null);
@@ -7,6 +7,11 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
 
   // Load user profile on mount if token exists
   useEffect(() => {
@@ -54,11 +59,6 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       throw error;
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
   };
 
   const refreshProfile = async () => {
