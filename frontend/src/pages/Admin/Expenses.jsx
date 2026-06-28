@@ -216,16 +216,23 @@ const Expenses = () => {
             </div>
 
             {/* Receipt Image Container */}
-            <div className="flex max-h-96 items-center justify-center rounded-xl bg-slate-100 p-4 dark:bg-zinc-950 border border-slate-200/50 dark:border-zinc-800 overflow-hidden">
-              <img
-                src={previewExpense.receiptUrl?.startsWith('http') || previewExpense.receiptUrl?.startsWith('data:')
-                  ? previewExpense.receiptUrl 
-                  : `${API_URL}${previewExpense.receiptUrl?.startsWith('/') ? '' : '/'}${previewExpense.receiptUrl}`
-                }
-                alt="Receipt upload"
-                className="max-h-80 w-auto max-w-full rounded-lg object-contain shadow-sm"
-              />
-            </div>
+            {previewExpense.receiptUrl ? (
+              <div className="flex max-h-96 items-center justify-center rounded-xl bg-slate-100 p-4 dark:bg-zinc-950 border border-slate-200/50 dark:border-zinc-800 overflow-hidden">
+                <img
+                  src={previewExpense.receiptUrl?.startsWith('http') || previewExpense.receiptUrl?.startsWith('data:')
+                    ? previewExpense.receiptUrl 
+                    : `${API_URL}${previewExpense.receiptUrl?.startsWith('/') ? '' : '/'}${previewExpense.receiptUrl}`
+                  }
+                  alt="Receipt upload"
+                  className="max-h-80 w-auto max-w-full rounded-lg object-contain shadow-sm"
+                />
+              </div>
+            ) : (
+              <div className="flex h-36 flex-col items-center justify-center rounded-xl bg-slate-50 text-xs font-semibold text-slate-400 dark:bg-zinc-950/40 border border-slate-200/50 dark:border-zinc-800">
+                <FileImage className="h-8 w-8 stroke-1 text-slate-300 mb-2" />
+                No Receipt Image Uploaded by Driver
+              </div>
+            )}
 
             {/* Description Display */}
             {previewExpense.description && (

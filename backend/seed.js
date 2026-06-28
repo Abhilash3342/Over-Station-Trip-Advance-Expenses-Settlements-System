@@ -124,7 +124,7 @@ const seedDatabase = async () => {
       amount: 8500.00,
       date: '2026-05-10',
       description: 'Diesel refuel at Shell bunk',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
@@ -133,7 +133,7 @@ const seedDatabase = async () => {
       amount: 1400.00,
       date: '2026-05-10',
       description: 'National Highway Fastag tolls',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
@@ -142,7 +142,7 @@ const seedDatabase = async () => {
       amount: 3500.00,
       date: '2026-05-12',
       description: 'Hotel room for 4 nights',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
@@ -151,7 +151,7 @@ const seedDatabase = async () => {
       amount: 2200.00,
       date: '2026-05-13',
       description: 'Driver meals during trip',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
 
@@ -162,7 +162,7 @@ const seedDatabase = async () => {
       amount: 6000.00,
       date: '2026-05-20',
       description: 'Diesel refill HP Petrol',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     const e2_2 = await Expense.create({
@@ -171,7 +171,7 @@ const seedDatabase = async () => {
       amount: 850.00,
       date: '2026-05-20',
       description: 'NH4 Toll Plaza charges',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     const e2_3 = await Expense.create({
@@ -180,7 +180,7 @@ const seedDatabase = async () => {
       amount: 2000.00,
       date: '2026-05-21',
       description: 'Lodge stay in Chennai',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     const e2_4 = await Expense.create({
@@ -189,7 +189,7 @@ const seedDatabase = async () => {
       amount: 400.00,
       date: '2026-05-22',
       description: 'Hotel parking charges',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'pending',
     });
 
@@ -200,7 +200,7 @@ const seedDatabase = async () => {
       amount: 11000.00,
       date: '2026-06-08',
       description: 'Initial tank full diesel',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
@@ -209,7 +209,7 @@ const seedDatabase = async () => {
       amount: 1950.00,
       date: '2026-06-09',
       description: 'Toll charges enroute Mumbai',
-      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+      receiptUrl: null,
       status: 'pending',
     });
 
