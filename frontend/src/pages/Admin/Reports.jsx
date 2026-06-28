@@ -104,17 +104,19 @@ const Reports = () => {
 
   // Search Logic
   const filteredDriverSummary = () => {
+    if (!Array.isArray(driverSummary)) return [];
     return driverSummary.filter(d => 
-      d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.licenseNumber.toLowerCase().includes(searchTerm.toLowerCase())
+      (d?.name || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+      (d?.licenseNumber || '').toLowerCase().includes((searchTerm || '').toLowerCase())
     );
   };
 
   const filteredTripSettlements = () => {
+    if (!Array.isArray(tripSettlements)) return [];
     return tripSettlements.filter(t => 
-      t.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.driverName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.vehicleNumber.toLowerCase().includes(searchTerm.toLowerCase())
+      (t?.destination || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+      (t?.driverName || '').toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+      (t?.vehicleNumber || '').toLowerCase().includes((searchTerm || '').toLowerCase())
     );
   };
 

@@ -221,12 +221,18 @@ export const getMockResponse = async (method, path, body) => {
     }
     if (cleanPath === '/api/reports/driver-summary') {
       return [
-        { driverName: 'Ramesh Shah', totalTrips: 2, totalAdvance: 35000, totalExpenses: 28550 },
-        { driverName: 'Suresh Patil', totalTrips: 1, totalAdvance: 10000, totalExpenses: 9250 },
-        { driverName: 'Vikram Singh', totalTrips: 1, totalAdvance: 8000, totalExpenses: 0 }
+        { id: 1, name: 'Ramesh Shah', phone: '9876543210', licenseNumber: 'DL-1420180098765', status: 'active', totalTrips: 2, totalAdvances: 35000, totalApprovedExpenses: 28550, balance: -6450 },
+        { id: 2, name: 'Suresh Patil', phone: '9876543211', licenseNumber: 'DL-1520190012345', status: 'active', totalTrips: 1, totalAdvances: 10000, totalApprovedExpenses: 8850, balance: -1150 },
+        { id: 3, name: 'Vikram Singh', phone: '9876543212', licenseNumber: 'DL-1220170054321', status: 'active', totalTrips: 1, totalAdvances: 8000, totalApprovedExpenses: 0, balance: -8000 }
       ];
     }
-    if (cleanPath === '/api/reports/trip-settlements') return settlementsStore;
+    if (cleanPath === '/api/reports/trip-settlements') {
+      return [
+        { id: 1, destination: 'Goa', driverName: 'Ramesh Shah', vehicleNumber: 'KA-51-MB-4321', startDate: '2026-05-10', endDate: '2026-05-15', advanceAmount: 15000, totalLoggedExpenses: 15600, totalApprovedExpenses: 15600, balance: 600, status: 'settled', settlementStatus: 'approved' },
+        { id: 2, destination: 'Chennai', driverName: 'Suresh Patil', vehicleNumber: 'KA-03-MM-7890', startDate: '2026-05-20', endDate: '2026-05-24', advanceAmount: 10000, totalLoggedExpenses: 9250, totalApprovedExpenses: 8850, balance: -1150, status: 'completed', settlementStatus: 'pending' },
+        { id: 3, destination: 'Mumbai', driverName: 'Ramesh Shah', vehicleNumber: 'KA-51-MB-4321', startDate: '2026-06-08', endDate: '2026-06-14', advanceAmount: 20000, totalLoggedExpenses: 12950, totalApprovedExpenses: 11000, balance: -9000, status: 'active', settlementStatus: 'Not Submitted' }
+      ];
+    }
     if (cleanPath === '/api/reports/monthly-trends') {
       return [
         { month: 'Jan', advance: 25000, expenses: 22000 },
