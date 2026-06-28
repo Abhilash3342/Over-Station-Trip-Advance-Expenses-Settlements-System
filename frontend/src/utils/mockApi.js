@@ -187,6 +187,20 @@ export const getMockResponse = async (method, path, body) => {
     if (method === 'POST') {
       const amount = parseFloat(body?.get?.('amount') || body?.amount || 0);
       const tripId = parseInt(body?.get?.('tripId') || body?.tripId || 0);
+      let receiptUrl = null;
+      
+      const receiptFile = body?.get?.('receipt');
+      if (receiptFile && typeof receiptFile === 'object' && (receiptFile instanceof File || receiptFile.name)) {
+        receiptUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(receiptFile);
+        });
+      } else if (typeof receiptFile === 'string') {
+        receiptUrl = receiptFile;
+      }
+
       const newExp = {
         id: Date.now(),
         tripId,
@@ -194,7 +208,7 @@ export const getMockResponse = async (method, path, body) => {
         amount,
         date: body?.get?.('date') || body?.date || new Date().toISOString().split('T')[0],
         description: body?.get?.('description') || body?.description || '',
-        receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+        receiptUrl: receiptUrl,
         status: 'pending'
       };
       expensesStore.unshift(newExp);
@@ -218,11 +232,27 @@ export const getMockResponse = async (method, path, body) => {
       setStored('app_expenses_v2', expensesStore);
       return expensesStore.find(e => e.id === id) || { message: 'Updated' };
     }
+    if (method === 'DELETE') {
+      expensesStore = expensesStore.filter(e => e.id !== id);
+      setStored('app_expenses_v2', expensesStore);
+      return { message: 'Expense deleted' };
+    }
   }
 
   // Settlements
   if (cleanPath === '/api/settlements') {
-    if (method === 'GET') return settlementsStore;
+    if (method === 'GET') {
+      return settlementsStore.map(s => {
+        const trip = tripsStore.find(t => t.id === s.tripId);
+        const tripExpenses = expensesStore.filter(e => e.tripId === s.tripId);
+        const firstReceipt = tripExpenses.find(e => e.receiptUrl)?.receiptUrl || null;
+        return {
+          ...s,
+          trip: trip ? { ...trip, driver: driversStore.find(d => d.id === trip.driverId), expenses: tripExpenses } : s.trip,
+          receipt: s.receipt || firstReceipt
+        };
+      });
+    }
     if (method === 'POST') {
       const tripId = parseInt(body.tripId);
       const trip = tripsStore.find(t => t.id === tripId);
@@ -230,7 +260,8 @@ export const getMockResponse = async (method, path, body) => {
       const totalExpenses = tripExpenses.reduce((sum, e) => sum + e.amount, 0);
       const advanceAmount = trip ? trip.advanceAmount : 0;
       const balance = totalExpenses - advanceAmount;
-      const newSettlement = { id: Date.now(), tripId, trip, totalExpenses, advanceAmount, balance, status: 'pending', remarks: '' };
+      const firstReceipt = tripExpenses.find(e => e.receiptUrl)?.receiptUrl || null;
+      const newSettlement = { id: Date.now(), tripId, trip, totalExpenses, advanceAmount, balance, status: 'pending', remarks: '', receipt: firstReceipt };
       settlementsStore.unshift(newSettlement);
       setStored('app_settlements_v2', settlementsStore);
       if (trip) {

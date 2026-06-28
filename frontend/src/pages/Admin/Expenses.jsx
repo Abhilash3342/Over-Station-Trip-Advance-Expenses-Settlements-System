@@ -218,9 +218,9 @@ const Expenses = () => {
             {/* Receipt Image Container */}
             <div className="flex max-h-96 items-center justify-center rounded-xl bg-slate-100 p-4 dark:bg-zinc-950 border border-slate-200/50 dark:border-zinc-800 overflow-hidden">
               <img
-                src={previewExpense.receiptUrl?.startsWith('http') 
+                src={previewExpense.receiptUrl?.startsWith('http') || previewExpense.receiptUrl?.startsWith('data:')
                   ? previewExpense.receiptUrl 
-                  : `${API_URL}/${previewExpense.receiptUrl}`
+                  : `${API_URL}${previewExpense.receiptUrl?.startsWith('/') ? '' : '/'}${previewExpense.receiptUrl}`
                 }
                 alt="Receipt upload"
                 className="max-h-80 w-auto max-w-full rounded-lg object-contain shadow-sm"

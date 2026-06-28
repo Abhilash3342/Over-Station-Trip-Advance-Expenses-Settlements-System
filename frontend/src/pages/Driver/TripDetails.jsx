@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import api from '../../utils/api';
+import api, { API_URL } from '../../utils/api';
 import { formatCurrency, formatDate, getStatusColor, capitalize } from '../../utils/formatters';
 import { 
   ArrowLeft, 
@@ -15,7 +15,8 @@ import {
   DollarSign, 
   X, 
   Compass,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Eye
 } from 'lucide-react';
 
 const TripDetails = () => {
@@ -33,6 +34,7 @@ const TripDetails = () => {
   const [description, setDescription] = useState('');
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptPreview, setReceiptPreview] = useState('');
+  const [viewReceiptModalUrl, setViewReceiptModalUrl] = useState(null);
   
   const [formError, setFormError] = useState('');
   const [submittingExpense, setSubmittingExpense] = useState(false);
@@ -377,15 +379,19 @@ const TripDetails = () => {
                       <td className="px-6 py-4 text-xs font-medium text-slate-500 dark:text-zinc-400">{expense.description || '-'}</td>
                       <td className="px-6 py-4">
                         {expense.receiptUrl ? (
-                          <a
-                            href={expense.receiptUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const resolvedUrl = expense.receiptUrl.startsWith('http') || expense.receiptUrl.startsWith('data:')
+                                ? expense.receiptUrl
+                                : `${API_URL}${expense.receiptUrl.startsWith('/') ? '' : '/'}${expense.receiptUrl}`;
+                              setViewReceiptModalUrl(resolvedUrl);
+                            }}
+                            className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                           >
-                            <FileText className="h-3.5 w-3.5" />
+                            <Eye className="h-3.5 w-3.5" />
                             View Receipt
-                          </a>
+                          </button>
                         ) : (
                           <span className="text-xs text-slate-400">No Image</span>
                         )}
@@ -558,6 +564,38 @@ const TripDetails = () => {
               </div>
 
             </form>
+          </div>
+        </div>
+      )}
+      {/* View Receipt Modal */}
+      {viewReceiptModalUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 animate-fade-in">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold">Receipt Image</h3>
+              <button 
+                onClick={() => setViewReceiptModalUrl(null)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="flex max-h-96 items-center justify-center rounded-xl bg-slate-100 p-4 dark:bg-zinc-950 border border-slate-200/50 dark:border-zinc-800 overflow-hidden">
+              <img
+                src={viewReceiptModalUrl}
+                alt="Uploaded Receipt"
+                className="max-h-80 w-auto max-w-full rounded-lg object-contain shadow-sm"
+              />
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setViewReceiptModalUrl(null)}
+                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold hover:bg-slate-50 dark:border-zinc-800"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

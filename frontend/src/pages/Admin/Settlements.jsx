@@ -279,25 +279,29 @@ const Settlements = () => {
             </div>
 
             {/* Receipt Preview Section */}
-            {selectedSettlement.receipt && (
-              <div className="space-y-2 mb-6">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
-                  Uploaded Receipt Link
-                </label>
-                <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-zinc-800 dark:bg-zinc-950">
-                  <img 
-                    src={
-                      selectedSettlement.receipt.startsWith('http')
-                        ? selectedSettlement.receipt
-                        : `${API_URL}/uploads/${selectedSettlement.receipt}`
-                    }
-                    alt="Receipt upload" 
-                    className="max-h-[250px] w-full object-contain mx-auto p-2"
-                    onError={(e) => { e.target.style.display = 'none'; }}
-                  />
+            {(() => {
+              const receiptUrl = selectedSettlement.receipt || selectedSettlement.trip?.expenses?.find(e => e.receiptUrl)?.receiptUrl;
+              if (!receiptUrl) return null;
+              return (
+                <div className="space-y-2 mb-6">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500">
+                    Uploaded Receipt Image
+                  </label>
+                  <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-zinc-800 dark:bg-zinc-950">
+                    <img 
+                      src={
+                        receiptUrl.startsWith('http') || receiptUrl.startsWith('data:')
+                          ? receiptUrl
+                          : `${API_URL}${receiptUrl.startsWith('/') ? '' : '/'}${receiptUrl}`
+                      }
+                      alt="Receipt upload" 
+                      className="max-h-[250px] w-full object-contain mx-auto p-2"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* Remarks Input */}
             <div className="space-y-2 mb-6">
