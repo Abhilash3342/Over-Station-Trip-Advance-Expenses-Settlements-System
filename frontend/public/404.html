@@ -13,7 +13,7 @@
       }
 
       const hashRoute = target === '/' ? '/#/' : '/#' + target;
-      const redirectRoot = path.startsWith(repoBase) ? repoBase : '';
+      const redirectRoot = repoBase;
       window.location.replace(redirectRoot + hashRoute + window.location.search);
     </script>
   </head>
