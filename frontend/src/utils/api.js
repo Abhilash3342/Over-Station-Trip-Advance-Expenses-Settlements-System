@@ -1,8 +1,10 @@
+import { getMockResponse } from './mockApi';
+
 const productionApiUrl = import.meta.env.VITE_API_URL;
 
 if (!import.meta.env.DEV && !productionApiUrl) {
   console.warn(
-    'VITE_API_URL is not configured for production. The app will still load, but API requests may fail unless a backend is available at the same origin or a value is provided.'
+    'VITE_API_URL is not configured for production. Running in static demo mode with mock fallback.'
   );
 }
 
@@ -34,9 +36,13 @@ const request = async (method, path, body = null, isMultipart = false) => {
   try {
     const res = await fetch(`${API_URL}${path}`, config);
     
-    // Safety check: if server responds with HTML instead of JSON (like a 404 or 502 page)
+    // Safety check: if server responds with HTML instead of JSON (like a 404 or 405 on static GitHub Pages)
     const contentType = res.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
+      if (!productionApiUrl) {
+        console.info(`[Static Demo Mode] Serving mock response for ${method} ${path}`);
+        return getMockResponse(method, path, body);
+      }
       throw new Error(`Server returned non-JSON response (${res.status}). Check server logs.`);
     }
 
@@ -48,6 +54,11 @@ const request = async (method, path, body = null, isMultipart = false) => {
 
     return data;
   } catch (error) {
+    if (!productionApiUrl) {
+      console.info(`[Static Demo Mode Fallback] Serving mock response for ${method} ${path}`);
+      return getMockResponse(method, path, body);
+    }
+
     if (!import.meta.env.DEV && error instanceof Error && error.message === 'Failed to fetch') {
       const backendError = new Error(
         `Unable to connect to the backend API at ${API_URL}. ` +
