@@ -1,14 +1,14 @@
 const productionApiUrl = import.meta.env.VITE_API_URL;
 
 if (!import.meta.env.DEV && !productionApiUrl) {
-  throw new Error(
-    'VITE_API_URL is not configured for production. Set VITE_API_URL to the deployed backend URL before building the frontend.'
+  console.warn(
+    'VITE_API_URL is not configured for production. The app will still load, but API requests may fail unless a backend is available at the same origin or a value is provided.'
   );
 }
 
 export const API_URL = import.meta.env.DEV
   ? ''
-  : productionApiUrl;
+  : (productionApiUrl || '');
 
 const request = async (method, path, body = null, isMultipart = false) => {
   const token = localStorage.getItem('token');
