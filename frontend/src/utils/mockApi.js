@@ -1,45 +1,45 @@
-// Mock Data Store for GitHub Pages static demo execution when backend server is unavailable
+// Mock Data Store for GitHub Pages static execution (Empty Clean Slate)
 
-let driversStore = [
-  { id: 1, userId: 2, name: 'Ramesh Shah', email: 'ramesh@manivtha.com', phone: '9876543210', licenseNumber: 'DL-1420180098765', status: 'active' },
-  { id: 2, userId: 4, name: 'Suresh Patil', email: 'suresh@manivtha.com', phone: '9876543211', licenseNumber: 'DL-1520190012345', status: 'active' },
-  { id: 3, userId: 5, name: 'Vikram Singh', email: 'vikram@manivtha.com', phone: '9876543212', licenseNumber: 'DL-1220170054321', status: 'active' },
-];
+const getStored = (key, defaultVal) => {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultVal;
+  } catch (e) {
+    return defaultVal;
+  }
+};
 
-let tripsStore = [
-  { id: 1, driverId: 1, driver: driversStore[0], destination: 'Goa', startDate: '2026-05-10', endDate: '2026-05-15', vehicleNumber: 'KA-51-MB-4321', advanceAmount: 15000.00, status: 'settled', expensesTotal: 15600.00 },
-  { id: 2, driverId: 2, driver: driversStore[1], destination: 'Chennai', startDate: '2026-05-20', endDate: '2026-05-24', vehicleNumber: 'KA-03-MM-7890', advanceAmount: 10000.00, status: 'completed', expensesTotal: 9250.00 },
-  { id: 3, driverId: 1, driver: driversStore[0], destination: 'Mumbai', startDate: '2026-06-08', endDate: '2026-06-14', vehicleNumber: 'KA-51-MB-4321', advanceAmount: 20000.00, status: 'active', expensesTotal: 12950.00 },
-  { id: 4, driverId: 3, driver: driversStore[2], destination: 'Hyderabad', startDate: '2026-06-15', endDate: '2026-06-18', vehicleNumber: 'KA-04-P-1122', advanceAmount: 8000.00, status: 'pending', expensesTotal: 0.00 },
-];
+const setStored = (key, val) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    console.error('Failed to save to localStorage', e);
+  }
+};
 
-let expensesStore = [
-  { id: 1, tripId: 1, category: 'fuel', amount: 8500.00, date: '2026-05-10', description: 'Diesel refuel at Shell bunk', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 2, tripId: 1, category: 'toll', amount: 1400.00, date: '2026-05-10', description: 'National Highway Fastag tolls', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 3, tripId: 1, category: 'accommodation', amount: 3500.00, date: '2026-05-12', description: 'Hotel room for 4 nights', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 4, tripId: 1, category: 'food', amount: 2200.00, date: '2026-05-13', description: 'Driver meals during trip', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 5, tripId: 2, category: 'fuel', amount: 6000.00, date: '2026-05-20', description: 'Diesel refill HP Petrol', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 6, tripId: 2, category: 'toll', amount: 850.00, date: '2026-05-20', description: 'NH4 Toll Plaza charges', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 7, tripId: 2, category: 'accommodation', amount: 2000.00, date: '2026-05-21', description: 'Lodge stay in Chennai', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 8, tripId: 2, category: 'parking', amount: 400.00, date: '2026-05-22', description: 'Hotel parking charges', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'pending', trip: tripsStore[1] },
-  { id: 9, tripId: 3, category: 'fuel', amount: 11000.00, date: '2026-06-08', description: 'Initial tank full diesel', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'approved' },
-  { id: 10, tripId: 3, category: 'toll', amount: 1950.00, date: '2026-06-09', description: 'Toll charges enroute Mumbai', receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400', status: 'pending', trip: tripsStore[2] },
-];
+let driversStore = getStored('app_drivers_v2', []);
+let tripsStore = getStored('app_trips_v2', []);
+let expensesStore = getStored('app_expenses_v2', []);
+let settlementsStore = getStored('app_settlements_v2', []);
+let notificationsStore = getStored('app_notifications_v2', []);
 
-let settlementsStore = [
-  { id: 1, tripId: 1, trip: tripsStore[0], totalExpenses: 15600.00, advanceAmount: 15000.00, balance: 600.00, status: 'approved', remarks: 'All bills verified. Reimbursement approved.' },
-  { id: 2, tripId: 2, trip: tripsStore[1], totalExpenses: 8850.00, advanceAmount: 10000.00, balance: -1150.00, status: 'pending', remarks: '' },
-];
-
-let notificationsStore = [
-  { id: 1, userId: 2, message: 'Your settlement request for Goa trip has been approved. ₹600 reimbursed.', isRead: true, createdAt: '2026-05-16' },
-  { id: 2, userId: 4, message: 'Please submit your settlement request for the completed Chennai trip.', isRead: false, createdAt: '2026-05-25' },
-  { id: 3, userId: 1, message: 'New settlement request submitted by Suresh Patil (Chennai trip). Awaiting review.', isRead: false, createdAt: '2026-05-25' },
-];
+export const clearAllMockData = () => {
+  driversStore = [];
+  tripsStore = [];
+  expensesStore = [];
+  settlementsStore = [];
+  notificationsStore = [];
+  localStorage.removeItem('app_drivers_v2');
+  localStorage.removeItem('app_trips_v2');
+  localStorage.removeItem('app_expenses_v2');
+  localStorage.removeItem('app_settlements_v2');
+  localStorage.removeItem('app_notifications_v2');
+  localStorage.removeItem('mock_current_user');
+};
 
 export const getMockResponse = async (method, path, body) => {
   // Artificial slight delay for natural feel
-  await new Promise(resolve => setTimeout(resolve, 200));
+  await new Promise(resolve => setTimeout(resolve, 150));
 
   const cleanPath = path.split('?')[0];
 
@@ -58,13 +58,14 @@ export const getMockResponse = async (method, path, body) => {
       localStorage.setItem('mock_current_user', JSON.stringify(user));
       return user;
     } else {
+      const existingDriver = driversStore.find(d => (d.email || d.user?.email) === email) || driversStore[0];
       const user = {
-        id: 2,
-        name: 'Ramesh Shah',
+        id: existingDriver?.userId || 2,
+        name: existingDriver?.name || 'Ramesh Shah (Driver)',
         email: email || 'ramesh@manivtha.com',
         role: 'driver',
-        phone: '9876543210',
-        driverProfile: driversStore[0],
+        phone: existingDriver?.phone || '9876543210',
+        driverProfile: existingDriver || { id: 1, name: 'Ramesh Shah', phone: '9876543210', licenseNumber: 'DL-1420180098765', status: 'active' },
         token: 'mock-driver-token-2026'
       };
       localStorage.setItem('mock_current_user', JSON.stringify(user));
@@ -79,11 +80,11 @@ export const getMockResponse = async (method, path, body) => {
   }
 
   if (cleanPath === '/api/auth/register') {
-    return { id: 99, name: body.name, email: body.email, role: body.role || 'driver', token: 'mock-reg-token' };
+    return { id: Date.now(), name: body.name, email: body.email, role: body.role || 'driver', token: 'mock-reg-token' };
   }
 
   if (cleanPath === '/api/auth/reset-password' || cleanPath === '/api/auth/change-password') {
-    return { message: 'Password updated successfully (Demo Mode)' };
+    return { message: 'Password updated successfully' };
   }
 
   if (cleanPath === '/api/auth/profile') {
@@ -97,17 +98,40 @@ export const getMockResponse = async (method, path, body) => {
   if (cleanPath === '/api/drivers') {
     if (method === 'GET') return driversStore;
     if (method === 'POST') {
-      const newDriver = { id: Date.now(), ...body, status: 'active' };
-      driversStore.push(newDriver);
+      const newDriver = {
+        id: Date.now(),
+        userId: Date.now() + 1,
+        name: body.name,
+        phone: body.phone,
+        licenseNumber: body.licenseNumber,
+        status: body.status || 'active',
+        email: body.email || '',
+        user: body.email ? { email: body.email, role: 'driver' } : null,
+        trips: []
+      };
+      driversStore.unshift(newDriver);
+      setStored('app_drivers_v2', driversStore);
       return newDriver;
     }
   }
 
   if (cleanPath.startsWith('/api/drivers/')) {
     const id = parseInt(cleanPath.split('/')[3]);
-    if (method === 'GET') return driversStore.find(d => d.id === id) || driversStore[0];
-    if (method === 'PUT') return { ...driversStore.find(d => d.id === id), ...body };
-    if (method === 'DELETE') { driversStore = driversStore.filter(d => d.id !== id); return { message: 'Deleted' }; }
+    if (method === 'GET') {
+      const d = driversStore.find(dr => dr.id === id) || { id, name: 'Driver', phone: '', licenseNumber: '', status: 'active', trips: [] };
+      const dTrips = tripsStore.filter(t => t.driverId === id);
+      return { ...d, trips: dTrips };
+    }
+    if (method === 'PUT') {
+      driversStore = driversStore.map(dr => dr.id === id ? { ...dr, ...body, user: body.email ? { email: body.email, role: 'driver' } : dr.user } : dr);
+      setStored('app_drivers_v2', driversStore);
+      return driversStore.find(dr => dr.id === id);
+    }
+    if (method === 'DELETE') {
+      driversStore = driversStore.filter(dr => dr.id !== id);
+      setStored('app_drivers_v2', driversStore);
+      return { message: 'Deleted' };
+    }
   }
 
   // Trips
@@ -116,13 +140,28 @@ export const getMockResponse = async (method, path, body) => {
       const stored = localStorage.getItem('mock_current_user');
       const currentUser = stored ? JSON.parse(stored) : null;
       if (currentUser?.role === 'driver') {
-        return tripsStore.filter(t => t.driverId === (currentUser.driverProfile?.id || 1));
+        const driverId = currentUser.driverProfile?.id;
+        return tripsStore.filter(t => t.driverId === driverId);
       }
       return tripsStore;
     }
     if (method === 'POST') {
-      const newTrip = { id: Date.now(), ...body, status: 'pending', expensesTotal: 0 };
-      tripsStore.push(newTrip);
+      const dId = parseInt(body.driverId);
+      const matchedDriver = driversStore.find(d => d.id === dId);
+      const newTrip = {
+        id: Date.now(),
+        driverId: dId,
+        driver: matchedDriver ? { id: matchedDriver.id, name: matchedDriver.name, phone: matchedDriver.phone } : { name: 'Unassigned' },
+        destination: body.destination,
+        startDate: body.startDate,
+        endDate: body.endDate,
+        vehicleNumber: body.vehicleNumber,
+        advanceAmount: parseFloat(body.advanceAmount || 0),
+        status: 'active',
+        expensesTotal: 0
+      };
+      tripsStore.unshift(newTrip);
+      setStored('app_trips_v2', tripsStore);
       return newTrip;
     }
   }
@@ -131,12 +170,12 @@ export const getMockResponse = async (method, path, body) => {
     const parts = cleanPath.split('/');
     const id = parseInt(parts[3]);
     if (parts[4] === 'status') {
-      const trip = tripsStore.find(t => t.id === id);
-      if (trip) trip.status = body.status;
-      return trip || { message: 'Status updated' };
+      tripsStore = tripsStore.map(t => t.id === id ? { ...t, status: body.status } : t);
+      setStored('app_trips_v2', tripsStore);
+      return tripsStore.find(t => t.id === id) || { message: 'Status updated' };
     }
     if (method === 'GET') {
-      const trip = tripsStore.find(t => t.id === id) || tripsStore[0];
+      const trip = tripsStore.find(t => t.id === id) || { id, destination: 'Trip', status: 'active', advanceAmount: 0 };
       const tripExpenses = expensesStore.filter(e => e.tripId === id);
       const settlement = settlementsStore.find(s => s.tripId === id);
       return { ...trip, expenses: tripExpenses, settlement };
@@ -146,34 +185,38 @@ export const getMockResponse = async (method, path, body) => {
   // Expenses
   if (cleanPath === '/api/expenses') {
     if (method === 'POST') {
-      const amount = parseFloat(body?.get?.('amount') || body?.amount || 1000);
-      const tripId = parseInt(body?.get?.('tripId') || body?.tripId || 3);
+      const amount = parseFloat(body?.get?.('amount') || body?.amount || 0);
+      const tripId = parseInt(body?.get?.('tripId') || body?.tripId || 0);
       const newExp = {
         id: Date.now(),
         tripId,
-        category: body?.get?.('category') || body?.category || 'fuel',
+        category: body?.get?.('category') || body?.category || 'other',
         amount,
         date: body?.get?.('date') || body?.date || new Date().toISOString().split('T')[0],
-        description: body?.get?.('description') || body?.description || 'Expense entry',
+        description: body?.get?.('description') || body?.description || '',
         receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
         status: 'pending'
       };
-      expensesStore.push(newExp);
+      expensesStore.unshift(newExp);
+      setStored('app_expenses_v2', expensesStore);
       return newExp;
     }
   }
 
   if (cleanPath === '/api/expenses/pending') {
-    return expensesStore.filter(e => e.status === 'pending');
+    return expensesStore.filter(e => e.status === 'pending').map(e => {
+      const tr = tripsStore.find(t => t.id === e.tripId);
+      return { ...e, trip: tr };
+    });
   }
 
   if (cleanPath.startsWith('/api/expenses/')) {
     const parts = cleanPath.split('/');
     const id = parseInt(parts[3]);
     if (parts[4] === 'status') {
-      const exp = expensesStore.find(e => e.id === id);
-      if (exp) exp.status = body.status;
-      return exp || { message: 'Expense status updated' };
+      expensesStore = expensesStore.map(e => e.id === id ? { ...e, status: body.status } : e);
+      setStored('app_expenses_v2', expensesStore);
+      return expensesStore.find(e => e.id === id) || { message: 'Updated' };
     }
   }
 
@@ -185,11 +228,15 @@ export const getMockResponse = async (method, path, body) => {
       const trip = tripsStore.find(t => t.id === tripId);
       const tripExpenses = expensesStore.filter(e => e.tripId === tripId && e.status === 'approved');
       const totalExpenses = tripExpenses.reduce((sum, e) => sum + e.amount, 0);
-      const advanceAmount = trip ? trip.advanceAmount : 10000;
+      const advanceAmount = trip ? trip.advanceAmount : 0;
       const balance = totalExpenses - advanceAmount;
       const newSettlement = { id: Date.now(), tripId, trip, totalExpenses, advanceAmount, balance, status: 'pending', remarks: '' };
-      settlementsStore.push(newSettlement);
-      if (trip) trip.status = 'completed';
+      settlementsStore.unshift(newSettlement);
+      setStored('app_settlements_v2', settlementsStore);
+      if (trip) {
+        trip.status = 'completed';
+        setStored('app_trips_v2', tripsStore);
+      }
       return newSettlement;
     }
   }
@@ -198,56 +245,97 @@ export const getMockResponse = async (method, path, body) => {
     const parts = cleanPath.split('/');
     const id = parseInt(parts[3]);
     if (parts[4] === 'status') {
+      settlementsStore = settlementsStore.map(st => st.id === id ? { ...st, status: body.status, remarks: body.remarks || st.remarks } : st);
+      setStored('app_settlements_v2', settlementsStore);
       const s = settlementsStore.find(st => st.id === id);
-      if (s) {
-        s.status = body.status;
-        s.remarks = body.remarks || s.remarks;
-        const trip = tripsStore.find(t => t.id === s.tripId);
-        if (trip && body.status === 'approved') trip.status = 'settled';
+      if (s && body.status === 'approved') {
+        tripsStore = tripsStore.map(t => t.id === s.tripId ? { ...t, status: 'settled' } : t);
+        setStored('app_trips_v2', tripsStore);
       }
-      return s || { message: 'Settlement updated' };
+      return s || { message: 'Updated' };
     }
   }
 
-  // Reports & Analytics
+  // Reports & Analytics (Calculated Dynamically from Real Data)
   if (cleanPath.startsWith('/api/reports/')) {
     if (cleanPath === '/api/reports/dashboard-stats') {
+      const activeTrips = tripsStore.filter(t => t.status === 'active').length;
+      const pendingSettlements = settlementsStore.filter(s => s.status === 'pending').length;
+      const totalAdvancesThisMonth = tripsStore.reduce((sum, t) => sum + (parseFloat(t.advanceAmount) || 0), 0);
+      const pendingReimbursements = settlementsStore
+        .filter(s => s.status === 'approved' && s.balance > 0)
+        .reduce((sum, s) => sum + s.balance, 0);
+
       return {
-        activeTrips: 1,
-        pendingSettlements: 1,
-        totalAdvancesThisMonth: 53000,
-        pendingReimbursements: 600
+        totalDrivers: driversStore.length,
+        totalTrips: tripsStore.length,
+        activeTrips,
+        completedTrips: tripsStore.filter(t => t.status === 'completed' || t.status === 'settled').length,
+        pendingSettlements,
+        approvedSettlements: settlementsStore.filter(s => s.status === 'approved').length,
+        totalExpenses: expensesStore.filter(e => e.status === 'approved').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0),
+        totalAdvancesThisMonth,
+        pendingReimbursements,
+        categoryBreakdown: [],
+        recentActivity: []
       };
     }
+
     if (cleanPath === '/api/reports/driver-summary') {
-      return [
-        { id: 1, name: 'Ramesh Shah', phone: '9876543210', licenseNumber: 'DL-1420180098765', status: 'active', totalTrips: 2, totalAdvances: 35000, totalApprovedExpenses: 28550, balance: -6450 },
-        { id: 2, name: 'Suresh Patil', phone: '9876543211', licenseNumber: 'DL-1520190012345', status: 'active', totalTrips: 1, totalAdvances: 10000, totalApprovedExpenses: 8850, balance: -1150 },
-        { id: 3, name: 'Vikram Singh', phone: '9876543212', licenseNumber: 'DL-1220170054321', status: 'active', totalTrips: 1, totalAdvances: 8000, totalApprovedExpenses: 0, balance: -8000 }
-      ];
+      return driversStore.map(driver => {
+        const driverTrips = tripsStore.filter(t => t.driverId === driver.id);
+        const totalTrips = driverTrips.length;
+        const totalAdvances = driverTrips.reduce((sum, t) => sum + (parseFloat(t.advanceAmount) || 0), 0);
+        const tripIds = driverTrips.map(t => t.id);
+        const approvedExpenses = expensesStore.filter(e => tripIds.includes(e.tripId) && e.status === 'approved');
+        const totalApprovedExpenses = approvedExpenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+        return {
+          id: driver.id,
+          name: driver.name,
+          phone: driver.phone,
+          licenseNumber: driver.licenseNumber,
+          status: driver.status,
+          totalTrips,
+          totalAdvances,
+          totalApprovedExpenses,
+          balance: totalApprovedExpenses - totalAdvances
+        };
+      });
     }
+
     if (cleanPath === '/api/reports/trip-settlements') {
-      return [
-        { id: 1, destination: 'Goa', driverName: 'Ramesh Shah', vehicleNumber: 'KA-51-MB-4321', startDate: '2026-05-10', endDate: '2026-05-15', advanceAmount: 15000, totalLoggedExpenses: 15600, totalApprovedExpenses: 15600, balance: 600, status: 'settled', settlementStatus: 'approved' },
-        { id: 2, destination: 'Chennai', driverName: 'Suresh Patil', vehicleNumber: 'KA-03-MM-7890', startDate: '2026-05-20', endDate: '2026-05-24', advanceAmount: 10000, totalLoggedExpenses: 9250, totalApprovedExpenses: 8850, balance: -1150, status: 'completed', settlementStatus: 'pending' },
-        { id: 3, destination: 'Mumbai', driverName: 'Ramesh Shah', vehicleNumber: 'KA-51-MB-4321', startDate: '2026-06-08', endDate: '2026-06-14', advanceAmount: 20000, totalLoggedExpenses: 12950, totalApprovedExpenses: 11000, balance: -9000, status: 'active', settlementStatus: 'Not Submitted' }
-      ];
+      return tripsStore.map(trip => {
+        const driver = driversStore.find(d => d.id === trip.driverId);
+        const tripExpenses = expensesStore.filter(e => e.tripId === trip.id);
+        const approved = tripExpenses.filter(e => e.status === 'approved');
+        const totalLoggedExpenses = tripExpenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+        const totalApprovedExpenses = approved.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+        const settlement = settlementsStore.find(s => s.tripId === trip.id);
+        return {
+          id: trip.id,
+          destination: trip.destination,
+          driverName: driver ? driver.name : (trip.driver?.name || 'Unassigned'),
+          vehicleNumber: trip.vehicleNumber,
+          startDate: trip.startDate,
+          endDate: trip.endDate,
+          advanceAmount: parseFloat(trip.advanceAmount || 0),
+          totalLoggedExpenses,
+          totalApprovedExpenses,
+          balance: totalApprovedExpenses - parseFloat(trip.advanceAmount || 0),
+          status: trip.status,
+          settlementStatus: settlement ? settlement.status : 'Not Submitted'
+        };
+      });
     }
+
     if (cleanPath === '/api/reports/monthly-trends') {
       return [
-        { month: 'Jan', advance: 25000, expenses: 22000 },
-        { month: 'Feb', advance: 30000, expenses: 28000 },
-        { month: 'Mar', advance: 45000, expenses: 41000 },
-        { month: 'Apr', advance: 40000, expenses: 39000 },
-        { month: 'May', advance: 25000, expenses: 24850 },
-        { month: 'Jun', advance: 28000, expenses: 14900 },
+        { month: 'Current Period', advance: tripsStore.reduce((sum, t) => sum + (parseFloat(t.advanceAmount) || 0), 0), expenses: expensesStore.filter(e => e.status === 'approved').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0) }
       ];
     }
+
     if (cleanPath === '/api/reports/audit-logs') {
-      return [
-        { id: 1, action: 'USER_LOGIN', details: 'Admin logged in', createdAt: new Date().toISOString() },
-        { id: 2, action: 'TRIP_CREATE', details: 'Created Mumbai trip', createdAt: new Date().toISOString() }
-      ];
+      return [];
     }
   }
 
