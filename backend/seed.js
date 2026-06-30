@@ -75,144 +75,303 @@ const seedDatabase = async () => {
       driverId: driverProfile1.id,
       fromAddress: 'Bangalore',
       destination: 'Goa',
-      startDate: '2026-05-10',
-      endDate: '2026-05-15',
+      startDate: '2026-06-01',
+      endDate: '2026-06-06',
       vehicleNumber: 'KA-51-MB-4321',
-      advanceAmount: 15000.00,
+      advanceAmount: 12000.00,
       status: 'settled',
     });
 
-    // Trip 2: Suresh - Bangalore to Chennai (Completed, Settlement Pending)
+    // Trip 2: Suresh - Bangalore to Chennai (Settled)
     const trip2 = await Trip.create({
       driverId: driverProfile2.id,
       fromAddress: 'Bangalore',
       destination: 'Chennai',
-      startDate: '2026-05-20',
-      endDate: '2026-05-24',
+      startDate: '2026-06-03',
+      endDate: '2026-06-07',
       vehicleNumber: 'KA-03-MM-7890',
       advanceAmount: 10000.00,
+      status: 'settled',
+    });
+
+    // Trip 3: Vikram - Bangalore to Hyderabad (Settled)
+    const trip3 = await Trip.create({
+      driverId: driverProfile3.id,
+      fromAddress: 'Bangalore',
+      destination: 'Hyderabad',
+      startDate: '2026-06-10',
+      endDate: '2026-06-14',
+      vehicleNumber: 'KA-04-P-1122',
+      advanceAmount: 15000.00,
+      status: 'settled',
+    });
+
+    // Trip 4: Ramesh - Bangalore to Mangalore (Completed, Settlement Pending)
+    const trip4 = await Trip.create({
+      driverId: driverProfile1.id,
+      fromAddress: 'Bangalore',
+      destination: 'Mangalore',
+      startDate: '2026-06-16',
+      endDate: '2026-06-20',
+      vehicleNumber: 'KA-51-MB-4321',
+      advanceAmount: 8000.00,
       status: 'completed',
     });
 
-    // Trip 3: Ramesh - Bangalore to Mumbai (Active/In-Progress)
-    const trip3 = await Trip.create({
+    // Trip 5: Suresh - Bangalore to Mysore (Completed, Settlement Pending)
+    const trip5 = await Trip.create({
+      driverId: driverProfile2.id,
+      fromAddress: 'Bangalore',
+      destination: 'Mysore',
+      startDate: '2026-06-22',
+      endDate: '2026-06-24',
+      vehicleNumber: 'KA-03-MM-7890',
+      advanceAmount: 5000.00,
+      status: 'completed',
+    });
+
+    // Trip 6: Ramesh - Bangalore to Mumbai (Active/In-Progress)
+    const trip6 = await Trip.create({
       driverId: driverProfile1.id,
       fromAddress: 'Bangalore',
       destination: 'Mumbai',
-      startDate: '2026-06-08',
-      endDate: '2026-06-14',
+      startDate: '2026-06-26',
+      endDate: '2026-07-02',
       vehicleNumber: 'KA-51-MB-4321',
       advanceAmount: 20000.00,
       status: 'active',
     });
 
-    // Trip 4: Vikram - Bangalore to Hyderabad (Pending/Upcoming)
-    const trip4 = await Trip.create({
+    // Trip 7: Vikram - Bangalore to Pune (Pending/Upcoming)
+    const trip7 = await Trip.create({
       driverId: driverProfile3.id,
       fromAddress: 'Bangalore',
-      destination: 'Hyderabad',
-      startDate: '2026-06-15',
-      endDate: '2026-06-18',
+      destination: 'Pune',
+      startDate: '2026-07-01',
+      endDate: '2026-07-05',
       vehicleNumber: 'KA-04-P-1122',
-      advanceAmount: 8000.00,
+      advanceAmount: 18000.00,
       status: 'pending',
     });
 
-    console.log('Seeded 4 Trips: Goa (Settled), Chennai (Completed), Mumbai (Active), Hyderabad (Pending)');
+    console.log('Seeded 7 Trips: 3 Settled, 2 Completed, 1 Active, 1 Pending');
 
     // 4. Create Expenses
-    // Trip 1 Expenses (Goa - All Approved)
+    // Trip 1 Expenses (Goa - Settled)
     await Expense.create({
       tripId: trip1.id,
       category: 'fuel',
-      amount: 8500.00,
-      date: '2026-05-10',
-      description: 'Diesel refuel at Shell bunk',
+      amount: 6500.00,
+      date: '2026-06-02',
+      description: 'Diesel Shell Bunk en route Goa',
       receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
       tripId: trip1.id,
       category: 'toll',
-      amount: 1400.00,
-      date: '2026-05-10',
-      description: 'National Highway Fastag tolls',
-      receiptUrl: null,
-      status: 'approved',
-    });
-    await Expense.create({
-      tripId: trip1.id,
-      category: 'accommodation',
-      amount: 3500.00,
-      date: '2026-05-12',
-      description: 'Hotel room for 4 nights',
+      amount: 1200.00,
+      date: '2026-06-02',
+      description: 'Fastag Toll charges NH48',
       receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
       tripId: trip1.id,
       category: 'food',
-      amount: 2200.00,
-      date: '2026-05-13',
-      description: 'Driver meals during trip',
+      amount: 1800.00,
+      date: '2026-06-04',
+      description: 'Meals for driver and guests',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip1.id,
+      category: 'accommodation',
+      amount: 2500.00,
+      date: '2026-06-05',
+      description: 'Goa Driver Lodge stay',
       receiptUrl: null,
       status: 'approved',
     });
 
-    // Trip 2 Expenses (Chennai - Approved & Pending)
-    const e2_1 = await Expense.create({
+    // Trip 2 Expenses (Chennai - Settled)
+    await Expense.create({
       tripId: trip2.id,
       category: 'fuel',
-      amount: 6000.00,
-      date: '2026-05-20',
-      description: 'Diesel refill HP Petrol',
+      amount: 5500.00,
+      date: '2026-06-03',
+      description: 'Diesel HP Petrol bunk',
       receiptUrl: null,
       status: 'approved',
     });
-    const e2_2 = await Expense.create({
+    await Expense.create({
       tripId: trip2.id,
       category: 'toll',
-      amount: 850.00,
-      date: '2026-05-20',
-      description: 'NH4 Toll Plaza charges',
+      amount: 950.00,
+      date: '2026-06-03',
+      description: 'Toll plaza charges',
       receiptUrl: null,
       status: 'approved',
     });
-    const e2_3 = await Expense.create({
+    await Expense.create({
       tripId: trip2.id,
       category: 'accommodation',
       amount: 2000.00,
-      date: '2026-05-21',
+      date: '2026-06-05',
       description: 'Lodge stay in Chennai',
       receiptUrl: null,
       status: 'approved',
     });
-    const e2_4 = await Expense.create({
+    await Expense.create({
       tripId: trip2.id,
-      category: 'parking',
-      amount: 400.00,
-      date: '2026-05-22',
-      description: 'Hotel parking charges',
+      category: 'food',
+      amount: 1200.00,
+      date: '2026-06-06',
+      description: 'Meals during trip',
       receiptUrl: null,
-      status: 'pending',
+      status: 'approved',
     });
 
-    // Trip 3 Expenses (Mumbai - Active)
+    // Trip 3 Expenses (Hyderabad - Settled)
     await Expense.create({
       tripId: trip3.id,
       category: 'fuel',
-      amount: 11000.00,
-      date: '2026-06-08',
-      description: 'Initial tank full diesel',
+      amount: 7000.00,
+      date: '2026-06-10',
+      description: 'Diesel Shell Station',
       receiptUrl: null,
       status: 'approved',
     });
     await Expense.create({
       tripId: trip3.id,
       category: 'toll',
+      amount: 1500.00,
+      date: '2026-06-10',
+      description: 'NH44 highway tolls',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip3.id,
+      category: 'accommodation',
+      amount: 3000.00,
+      date: '2026-06-12',
+      description: 'Hotel stay Hyderabad',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip3.id,
+      category: 'food',
+      amount: 2200.00,
+      date: '2026-06-13',
+      description: 'Meals & refreshment charges',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip3.id,
+      category: 'miscellaneous',
+      amount: 1500.00,
+      date: '2026-06-14',
+      description: 'Ad-hoc vehicle wash and cleaning',
+      receiptUrl: null,
+      status: 'approved',
+    });
+
+    // Trip 4 Expenses (Mangalore - Completed, Settlement Pending)
+    await Expense.create({
+      tripId: trip4.id,
+      category: 'fuel',
+      amount: 4500.00,
+      date: '2026-06-16',
+      description: 'Diesel refuel at Mangalore Highway',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip4.id,
+      category: 'toll',
+      amount: 600.00,
+      date: '2026-06-16',
+      description: 'Toll plaza charges',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip4.id,
+      category: 'food',
+      amount: 1000.00,
+      date: '2026-06-18',
+      description: 'Driver meals',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip4.id,
+      category: 'parking',
+      amount: 250.00,
+      date: '2026-06-19',
+      description: 'Beach parking fee',
+      receiptUrl: null,
+      status: 'pending',
+    });
+
+    // Trip 5 Expenses (Mysore - Completed, Settlement Pending)
+    await Expense.create({
+      tripId: trip5.id,
+      category: 'fuel',
+      amount: 2800.00,
+      date: '2026-06-22',
+      description: 'Diesel refill HP Bunk',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip5.id,
+      category: 'food',
+      amount: 900.00,
+      date: '2026-06-23',
+      description: 'Meals during stay',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip5.id,
+      category: 'toll',
+      amount: 300.00,
+      date: '2026-06-22',
+      description: 'Mysore Expressway toll',
+      receiptUrl: null,
+      status: 'pending',
+    });
+
+    // Trip 6 Expenses (Mumbai - Active/Ongoing)
+    await Expense.create({
+      tripId: trip6.id,
+      category: 'fuel',
+      amount: 10500.00,
+      date: '2026-06-26',
+      description: 'Initial tank full diesel Shell',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip6.id,
+      category: 'toll',
       amount: 1950.00,
-      date: '2026-06-09',
+      date: '2026-06-26',
       description: 'Toll charges enroute Mumbai',
+      receiptUrl: null,
+      status: 'approved',
+    });
+    await Expense.create({
+      tripId: trip6.id,
+      category: 'food',
+      amount: 1500.00,
+      date: '2026-06-28',
+      description: 'Dhaba meals along highway',
       receiptUrl: null,
       status: 'pending',
     });
@@ -220,28 +379,52 @@ const seedDatabase = async () => {
     console.log('Seeded Expenses across trips.');
 
     // 5. Create Settlements
-    // Settlement 1 (Goa - Approved)
-    // total approved = 8500 + 1400 + 3500 + 2200 = 15600
-    // advance = 15000
-    // balance = 600 (Company pays driver)
+    // Settlement 1 (Goa - Settled)
     await Settlement.create({
       tripId: trip1.id,
-      totalExpenses: 15600.00,
-      advanceAmount: 15000.00,
-      balance: 600.00,
+      totalExpenses: 12000.00,
+      advanceAmount: 12000.00,
+      balance: 0.00,
       status: 'approved',
-      remarks: 'All bills verified. Reimbursement of Rs 600 approved.',
+      remarks: 'All bills verified. Settlement complete.',
     });
 
-    // Settlement 2 (Chennai - Pending)
-    // total approved so far = 6000 + 850 + 2000 = 8850
-    // advance = 10000
-    // balance = -1150 (Driver returns to company)
+    // Settlement 2 (Chennai - Settled)
     await Settlement.create({
       tripId: trip2.id,
-      totalExpenses: 8850.00,
+      totalExpenses: 9650.00,
       advanceAmount: 10000.00,
-      balance: -1150.00,
+      balance: -350.00,
+      status: 'approved',
+      remarks: 'Driver returned the remaining balance of Rs 350. Closed.',
+    });
+
+    // Settlement 3 (Hyderabad - Settled)
+    await Settlement.create({
+      tripId: trip3.id,
+      totalExpenses: 15200.00,
+      advanceAmount: 15000.00,
+      balance: 200.00,
+      status: 'approved',
+      remarks: 'Bills audited. Extra expenses of Rs 200 reimbursed to driver.',
+    });
+
+    // Settlement 4 (Mangalore - Pending)
+    await Settlement.create({
+      tripId: trip4.id,
+      totalExpenses: 6100.00,
+      advanceAmount: 8000.00,
+      balance: -1900.00,
+      status: 'pending',
+      remarks: '',
+    });
+
+    // Settlement 5 (Mysore - Pending)
+    await Settlement.create({
+      tripId: trip5.id,
+      totalExpenses: 3700.00,
+      advanceAmount: 5000.00,
+      balance: -1300.00,
       status: 'pending',
       remarks: '',
     });
@@ -251,35 +434,32 @@ const seedDatabase = async () => {
     // 6. Create Notifications
     await Notification.create({
       userId: driverUser1.id,
-      message: 'Your settlement request for Goa trip has been approved. ₹600 reimbursed.',
+      message: 'Your settlement request for Goa trip has been settled.',
       isRead: true,
     });
     await Notification.create({
       userId: driverUser2.id,
-      message: 'Please submit your settlement request for the completed Chennai trip.',
+      message: 'Your settlement request for Chennai trip has been settled.',
+      isRead: true,
+    });
+    await Notification.create({
+      userId: driverUser1.id,
+      message: 'Please return the remaining balance of ₹1900 for the Mangalore trip.',
       isRead: false,
     });
     await Notification.create({
       userId: adminUser.id,
-      message: 'New settlement request submitted by Suresh Patil (Chennai trip). Awaiting review.',
+      message: 'New settlement request submitted by Suresh Patil (Mysore trip). Awaiting review.',
       isRead: false,
     });
+
+    console.log('Seeded Notifications.');
 
     // 7. Create Audit Logs
     await AuditLog.create({
       userId: adminUser.id,
       action: 'SYSTEM_SETUP',
-      details: 'Initial database seed completed.',
-    });
-    await AuditLog.create({
-      userId: adminUser.id,
-      action: 'TRIP_CREATE',
-      details: 'Created and assigned Goa trip to Ramesh Shah.',
-    });
-    await AuditLog.create({
-      userId: adminUser.id,
-      action: 'SETTLEMENT_APPROVED',
-      details: 'Approved Goa trip settlement. Balance of ₹600 reimbursed to Ramesh Shah.',
+      details: 'Database seeded with June 2026 activities.',
     });
 
     console.log('Database seeded successfully!');

@@ -23,23 +23,151 @@ const defaultDrivers = [
   { id: 3, userId: 4, name: 'Vikram Singh', email: 'vikram@manivtha.com', phone: '9876543212', licenseNumber: 'DL-1220170054321', status: 'active' }
 ];
 
+const defaultTrips = [
+  {
+    id: 101,
+    driverId: 1,
+    driver: { id: 1, name: 'Ramesh Shah', phone: '9876543210' },
+    fromAddress: 'Bangalore',
+    destination: 'Goa',
+    startDate: '2026-06-01',
+    endDate: '2026-06-06',
+    vehicleNumber: 'KA-51-MB-4321',
+    advanceAmount: 12000,
+    status: 'settled'
+  },
+  {
+    id: 102,
+    driverId: 2,
+    driver: { id: 2, name: 'Suresh Patil', phone: '9876543211' },
+    fromAddress: 'Bangalore',
+    destination: 'Chennai',
+    startDate: '2026-06-03',
+    endDate: '2026-06-07',
+    vehicleNumber: 'KA-03-MM-7890',
+    advanceAmount: 10000,
+    status: 'settled'
+  },
+  {
+    id: 103,
+    driverId: 3,
+    driver: { id: 3, name: 'Vikram Singh', phone: '9876543212' },
+    fromAddress: 'Bangalore',
+    destination: 'Hyderabad',
+    startDate: '2026-06-10',
+    endDate: '2026-06-14',
+    vehicleNumber: 'KA-04-P-1122',
+    advanceAmount: 15000,
+    status: 'settled'
+  },
+  {
+    id: 104,
+    driverId: 1,
+    driver: { id: 1, name: 'Ramesh Shah', phone: '9876543210' },
+    fromAddress: 'Bangalore',
+    destination: 'Mangalore',
+    startDate: '2026-06-16',
+    endDate: '2026-06-20',
+    vehicleNumber: 'KA-51-MB-4321',
+    advanceAmount: 8000,
+    status: 'completed'
+  },
+  {
+    id: 105,
+    driverId: 2,
+    driver: { id: 2, name: 'Suresh Patil', phone: '9876543211' },
+    fromAddress: 'Bangalore',
+    destination: 'Mysore',
+    startDate: '2026-06-22',
+    endDate: '2026-06-24',
+    vehicleNumber: 'KA-03-MM-7890',
+    advanceAmount: 5000,
+    status: 'completed'
+  },
+  {
+    id: 106,
+    driverId: 1,
+    driver: { id: 1, name: 'Ramesh Shah', phone: '9876543210' },
+    fromAddress: 'Bangalore',
+    destination: 'Mumbai',
+    startDate: '2026-06-26',
+    endDate: '2026-07-02',
+    vehicleNumber: 'KA-51-MB-4321',
+    advanceAmount: 20000,
+    status: 'active'
+  },
+  {
+    id: 107,
+    driverId: 3,
+    driver: { id: 3, name: 'Vikram Singh', phone: '9876543212' },
+    fromAddress: 'Bangalore',
+    destination: 'Pune',
+    startDate: '2026-07-01',
+    endDate: '2026-07-05',
+    vehicleNumber: 'KA-04-P-1122',
+    advanceAmount: 18000,
+    status: 'pending'
+  }
+];
+
+const defaultExpenses = [
+  { id: 201, tripId: 101, category: 'fuel', amount: 6500, date: '2026-06-02', description: 'Diesel Shell Bunk en route Goa', status: 'approved' },
+  { id: 202, tripId: 101, category: 'toll', amount: 1200, date: '2026-06-02', description: 'Fastag Toll charges NH48', status: 'approved' },
+  { id: 203, tripId: 101, category: 'food', amount: 1800, date: '2026-06-04', description: 'Meals for driver and guests', status: 'approved' },
+  { id: 204, tripId: 101, category: 'accommodation', amount: 2500, date: '2026-06-05', description: 'Goa Driver Lodge stay', status: 'approved' },
+  { id: 205, tripId: 102, category: 'fuel', amount: 5500, date: '2026-06-03', description: 'Diesel HP Petrol bunk', status: 'approved' },
+  { id: 206, tripId: 102, category: 'toll', amount: 950, date: '2026-06-03', description: 'Toll plaza charges', status: 'approved' },
+  { id: 207, tripId: 102, category: 'accommodation', amount: 2000, date: '2026-06-05', description: 'Lodge stay in Chennai', status: 'approved' },
+  { id: 208, tripId: 102, category: 'food', amount: 1200, date: '2026-06-06', description: 'Meals during trip', status: 'approved' },
+  { id: 209, tripId: 103, category: 'fuel', amount: 7000, date: '2026-06-10', description: 'Diesel Shell Station', status: 'approved' },
+  { id: 210, tripId: 103, category: 'toll', amount: 1500, date: '2026-06-10', description: 'NH44 highway tolls', status: 'approved' },
+  { id: 211, tripId: 103, category: 'accommodation', amount: 3000, date: '2026-06-12', description: 'Hotel stay Hyderabad', status: 'approved' },
+  { id: 212, tripId: 103, category: 'food', amount: 2200, date: '2026-06-13', description: 'Meals & refreshment charges', status: 'approved' },
+  { id: 213, tripId: 103, category: 'miscellaneous', amount: 1500, date: '2026-06-14', description: 'Ad-hoc vehicle wash and cleaning', status: 'approved' },
+  { id: 214, tripId: 104, category: 'fuel', amount: 4500, date: '2026-06-16', description: 'Diesel refuel at Mangalore Highway', status: 'approved' },
+  { id: 215, tripId: 104, category: 'toll', amount: 600, date: '2026-06-16', description: 'Toll plaza charges', status: 'approved' },
+  { id: 216, tripId: 104, category: 'food', amount: 1000, date: '2026-06-18', description: 'Driver meals', status: 'approved' },
+  { id: 217, tripId: 104, category: 'parking', amount: 250, date: '2026-06-19', description: 'Beach parking fee', status: 'pending' },
+  { id: 218, tripId: 105, category: 'fuel', amount: 2800, date: '2026-06-22', description: 'Diesel refill HP Bunk', status: 'approved' },
+  { id: 219, tripId: 105, category: 'food', amount: 900, date: '2026-06-23', description: 'Meals during stay', status: 'approved' },
+  { id: 220, tripId: 105, category: 'toll', amount: 300, date: '2026-06-22', description: 'Mysore Expressway toll', status: 'pending' },
+  { id: 221, tripId: 106, category: 'fuel', amount: 10500, date: '2026-06-26', description: 'Initial tank full diesel Shell', status: 'approved' },
+  { id: 222, tripId: 106, category: 'toll', amount: 1950, date: '2026-06-26', description: 'Toll charges enroute Mumbai', status: 'approved' },
+  { id: 223, tripId: 106, category: 'food', amount: 1500, date: '2026-06-28', description: 'Dhaba meals along highway', status: 'pending' }
+];
+
+const defaultSettlements = [
+  { id: 301, tripId: 101, totalExpenses: 12000, advanceAmount: 12000, balance: 0, status: 'approved', remarks: 'All bills verified. Settlement complete.' },
+  { id: 302, tripId: 102, totalExpenses: 9650, advanceAmount: 10000, balance: -350, status: 'approved', remarks: 'Driver returned the remaining balance of Rs 350. Closed.' },
+  { id: 303, tripId: 103, totalExpenses: 15200, advanceAmount: 15000, balance: 200, status: 'approved', remarks: 'Bills audited. Extra expenses of Rs 200 reimbursed to driver.' },
+  { id: 304, tripId: 104, totalExpenses: 6100, advanceAmount: 8000, balance: -1900, status: 'pending', remarks: '' },
+  { id: 305, tripId: 105, totalExpenses: 3700, advanceAmount: 5000, balance: -1300, status: 'pending', remarks: '' }
+];
+
+const defaultNotifications = [
+  { id: 401, userId: 2, message: 'Your settlement request for Goa trip has been settled.', isRead: true },
+  { id: 402, userId: 3, message: 'Your settlement request for Chennai trip has been settled.', isRead: true },
+  { id: 403, userId: 2, message: 'Please return the remaining balance of ₹1900 for the Mangalore trip.', isRead: false },
+  { id: 404, userId: 1, message: 'New settlement request submitted by Suresh Patil (Mysore trip). Awaiting review.', isRead: false }
+];
+
 let driversStore = getStored('app_drivers_v2', defaultDrivers);
-let tripsStore = getStored('app_trips_v2', []);
-let expensesStore = getStored('app_expenses_v2', []);
-let settlementsStore = getStored('app_settlements_v2', []);
-let notificationsStore = getStored('app_notifications_v2', []);
+let tripsStore = getStored('app_trips_v2', defaultTrips);
+let expensesStore = getStored('app_expenses_v2', defaultExpenses);
+let settlementsStore = getStored('app_settlements_v2', defaultSettlements);
+let notificationsStore = getStored('app_notifications_v2', defaultNotifications);
 
 export const clearAllMockData = () => {
   driversStore = defaultDrivers;
-  tripsStore = [];
-  expensesStore = [];
-  settlementsStore = [];
-  notificationsStore = [];
-  localStorage.removeItem('app_drivers_v2');
-  localStorage.removeItem('app_trips_v2');
-  localStorage.removeItem('app_expenses_v2');
-  localStorage.removeItem('app_settlements_v2');
-  localStorage.removeItem('app_notifications_v2');
+  tripsStore = defaultTrips;
+  expensesStore = defaultExpenses;
+  settlementsStore = defaultSettlements;
+  notificationsStore = defaultNotifications;
+  localStorage.setItem('app_drivers_v2', JSON.stringify(defaultDrivers));
+  localStorage.setItem('app_trips_v2', JSON.stringify(defaultTrips));
+  localStorage.setItem('app_expenses_v2', JSON.stringify(defaultExpenses));
+  localStorage.setItem('app_settlements_v2', JSON.stringify(defaultSettlements));
+  localStorage.setItem('app_notifications_v2', JSON.stringify(defaultNotifications));
   localStorage.removeItem('mock_current_user');
 };
 
