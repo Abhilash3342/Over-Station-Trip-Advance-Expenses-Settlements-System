@@ -47,10 +47,10 @@ export const AuthProvider = ({ children }) => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const login = async (email, password) => {
+  const login = async (email, password, name = '') => {
     setLoading(true);
     try {
-      const data = await api.auth.login({ email, password });
+      const data = await api.auth.login({ email, password, name });
       localStorage.setItem('token', data.token);
       setUser(data);
       setLoading(false);

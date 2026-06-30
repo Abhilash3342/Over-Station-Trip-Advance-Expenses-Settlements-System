@@ -17,14 +17,20 @@ const setStored = (key, val) => {
   }
 };
 
-let driversStore = getStored('app_drivers_v2', []);
+const defaultDrivers = [
+  { id: 1, userId: 2, name: 'Ramesh Shah', email: 'ramesh@manivtha.com', phone: '9876543210', licenseNumber: 'DL-1420180098765', status: 'active' },
+  { id: 2, userId: 3, name: 'Suresh Patil', email: 'suresh@manivtha.com', phone: '9876543211', licenseNumber: 'DL-1520190012345', status: 'active' },
+  { id: 3, userId: 4, name: 'Vikram Singh', email: 'vikram@manivtha.com', phone: '9876543212', licenseNumber: 'DL-1220170054321', status: 'active' }
+];
+
+let driversStore = getStored('app_drivers_v2', defaultDrivers);
 let tripsStore = getStored('app_trips_v2', []);
 let expensesStore = getStored('app_expenses_v2', []);
 let settlementsStore = getStored('app_settlements_v2', []);
 let notificationsStore = getStored('app_notifications_v2', []);
 
 export const clearAllMockData = () => {
-  driversStore = [];
+  driversStore = defaultDrivers;
   tripsStore = [];
   expensesStore = [];
   settlementsStore = [];
@@ -45,11 +51,11 @@ export const getMockResponse = async (method, path, body) => {
 
   // Auth Endpoints
   if (cleanPath === '/api/auth/login') {
-    const { email } = body || {};
+    const { email, name: inputName } = body || {};
     if (email && email.includes('admin')) {
       const user = {
         id: 1,
-        name: 'Aditya Kumar (Admin)',
+        name: inputName ? (inputName.includes('Admin') ? inputName : `${inputName} (Admin)`) : 'Aditya Kumar (Admin)',
         email: 'admin@manivtha.com',
         role: 'admin',
         phone: '9876543200',
@@ -58,14 +64,16 @@ export const getMockResponse = async (method, path, body) => {
       localStorage.setItem('mock_current_user', JSON.stringify(user));
       return user;
     } else {
-      const existingDriver = driversStore.find(d => (d.email || d.user?.email) === email) || driversStore[0];
+      const matched = defaultDrivers.find(d => d.email === email) || driversStore.find(d => (d.email || d.user?.email) === email) || defaultDrivers[0];
+      const profileName = inputName || matched.name;
+      const driverProf = { ...matched, name: profileName };
       const user = {
-        id: existingDriver?.userId || 2,
-        name: existingDriver?.name || 'Ramesh Shah (Driver)',
-        email: email || 'ramesh@manivtha.com',
+        id: matched.userId,
+        name: inputName ? (inputName.includes('Driver') ? inputName : `${inputName} (Driver)`) : `${matched.name} (Driver)`,
+        email: email || matched.email,
         role: 'driver',
-        phone: existingDriver?.phone || '9876543210',
-        driverProfile: existingDriver || { id: 1, name: 'Ramesh Shah', phone: '9876543210', licenseNumber: 'DL-1420180098765', status: 'active' },
+        phone: matched.phone,
+        driverProfile: driverProf,
         token: 'mock-driver-token-2026'
       };
       localStorage.setItem('mock_current_user', JSON.stringify(user));

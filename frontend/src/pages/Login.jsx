@@ -2,9 +2,10 @@ import { useState } from 'react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { Shield, Lock, Mail, Eye, EyeOff, User } from 'lucide-react';
 
 const Login = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +17,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError('Please fill in all required fields');
       return;
     }
 
@@ -24,7 +25,7 @@ const Login = () => {
     setIsSubmitting(true);
 
     try {
-      const data = await login(email, password);
+      const data = await login(email, password, name);
       if (data.role === 'admin') {
         navigate('/admin');
       } else {
@@ -37,13 +38,29 @@ const Login = () => {
     }
   };
 
-  const handleQuickFill = (role) => {
-    if (role === 'admin') {
+  const [selectedAccountName, setSelectedAccountName] = useState('');
+
+  const handleQuickFill = (accountType) => {
+    if (accountType === 'admin') {
+      setName('Aditya Kumar');
       setEmail('admin@manivtha.com');
       setPassword('admin123');
-    } else {
+      setSelectedAccountName('Aditya Kumar (Admin)');
+    } else if (accountType === 'ramesh') {
+      setName('Ramesh Shah');
       setEmail('ramesh@manivtha.com');
       setPassword('driver123');
+      setSelectedAccountName('Ramesh Shah (Driver)');
+    } else if (accountType === 'suresh') {
+      setName('Suresh Patil');
+      setEmail('suresh@manivtha.com');
+      setPassword('driver123');
+      setSelectedAccountName('Suresh Patil (Driver)');
+    } else if (accountType === 'vikram') {
+      setName('Vikram Singh');
+      setEmail('vikram@manivtha.com');
+      setPassword('driver123');
+      setSelectedAccountName('Vikram Singh (Driver)');
     }
   };
 
@@ -76,6 +93,13 @@ const Login = () => {
             Sign In to your Account
           </h2>
 
+          {selectedAccountName && (
+            <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50/70 p-3 text-xs font-semibold text-blue-700 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-300 flex items-center justify-between">
+              <span>Selected Account: <strong>{selectedAccountName}</strong></span>
+              <button onClick={() => { setSelectedAccountName(''); setName(''); }} className="text-blue-500 hover:text-blue-700 text-xs font-bold ml-2">Clear</button>
+            </div>
+          )}
+
           {error && (
             <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs font-semibold text-rose-600 dark:border-rose-950/30 dark:bg-rose-950/10 dark:text-rose-400">
               {error}
@@ -84,6 +108,25 @@ const Login = () => {
 
           <form className="space-y-5" onSubmit={handleSubmit}>
             
+            {/* Name Field */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">
+                Name / Driver Name
+              </label>
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 dark:text-zinc-500">
+                  <User className="h-4 w-4" />
+                </div>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="block w-full rounded-xl border border-slate-200 bg-slate-50/50 py-3 pl-10 pr-4 text-sm font-medium text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-100 dark:focus:border-blue-500 dark:focus:bg-zinc-950"
+                  placeholder="Enter your name (e.g. Aditya, Ramesh)"
+                />
+              </div>
+            </div>
+
             {/* Email Field */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">
@@ -97,7 +140,7 @@ const Login = () => {
                   type="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); setSelectedAccountName(''); }}
                   className="block w-full rounded-xl border border-slate-200 bg-slate-50/50 py-3 pl-10 pr-4 text-sm font-medium text-slate-800 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-100 dark:focus:border-blue-500 dark:focus:bg-zinc-950"
                   placeholder="name@company.com"
                 />
@@ -150,20 +193,34 @@ const Login = () => {
             <span className="block text-center text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-3">
               Quick Demo Login
             </span>
-            <div className="flex gap-3">
+            <div className="grid grid-cols-2 gap-2.5">
               <button
                 type="button"
                 onClick={() => handleQuickFill('admin')}
-                className="flex-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-xs font-bold text-slate-700 hover:text-slate-900 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300 dark:hover:text-zinc-100 transition-all"
+                className="rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-all text-center"
               >
-                As Admin
+                As Admin (Aditya)
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickFill('driver')}
-                className="flex-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-xs font-bold text-slate-700 hover:text-slate-900 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300 dark:hover:text-zinc-100 transition-all"
+                onClick={() => handleQuickFill('ramesh')}
+                className="rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-all text-center"
               >
                 As Driver (Ramesh)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill('suresh')}
+                className="rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-all text-center"
+              >
+                As Driver (Suresh)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill('vikram')}
+                className="rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-all text-center"
+              >
+                As Driver (Vikram)
               </button>
             </div>
           </div>
