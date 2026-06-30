@@ -420,7 +420,14 @@ const Drivers = () => {
                       ) : (
                         selectedDriver.trips.map((trip) => (
                           <tr key={trip.id} className="hover:bg-slate-50/30 dark:hover:bg-zinc-800/10">
-                            <td className="px-4 py-3 font-semibold">{trip.destination}</td>
+                            <td className="px-4 py-3">
+                              <div className="flex flex-col">
+                                <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-medium">
+                                  {trip.fromAddress || 'Bangalore'} ➔
+                                </span>
+                                <span className="font-semibold">{trip.destination}</span>
+                              </div>
+                            </td>
                             <td className="px-4 py-3 font-mono">{trip.vehicleNumber}</td>
                             <td className="px-4 py-3 font-medium">{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</td>
                             <td className="px-4 py-3 font-bold">₹{parseFloat(trip.advanceAmount).toLocaleString('en-IN')}</td>

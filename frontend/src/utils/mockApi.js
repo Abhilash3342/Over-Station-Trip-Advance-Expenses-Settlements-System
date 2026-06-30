@@ -160,6 +160,7 @@ export const getMockResponse = async (method, path, body) => {
         id: Date.now(),
         driverId: dId,
         driver: matchedDriver ? { id: matchedDriver.id, name: matchedDriver.name, phone: matchedDriver.phone } : { name: 'Unassigned' },
+        fromAddress: body.fromAddress || 'Bangalore',
         destination: body.destination,
         startDate: body.startDate,
         endDate: body.endDate,
@@ -181,6 +182,24 @@ export const getMockResponse = async (method, path, body) => {
       tripsStore = tripsStore.map(t => t.id === id ? { ...t, status: body.status } : t);
       setStored('app_trips_v2', tripsStore);
       return tripsStore.find(t => t.id === id) || { message: 'Status updated' };
+    }
+    if (method === 'PUT') {
+      tripsStore = tripsStore.map(t => {
+        if (t.id === id) {
+          const dId = parseInt(body.driverId) || t.driverId;
+          const matchedDriver = driversStore.find(d => d.id === dId);
+          return {
+            ...t,
+            ...body,
+            driverId: dId,
+            driver: matchedDriver ? { id: matchedDriver.id, name: matchedDriver.name, phone: matchedDriver.phone } : t.driver,
+            advanceAmount: parseFloat(body.advanceAmount !== undefined ? body.advanceAmount : t.advanceAmount)
+          };
+        }
+        return t;
+      });
+      setStored('app_trips_v2', tripsStore);
+      return tripsStore.find(t => t.id === id);
     }
     if (method === 'GET') {
       const trip = tripsStore.find(t => t.id === id) || { id, destination: 'Trip', status: 'active', advanceAmount: 0 };

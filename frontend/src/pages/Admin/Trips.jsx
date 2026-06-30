@@ -19,6 +19,7 @@ const Trips = () => {
 
   // Form Fields
   const [driverId, setDriverId] = useState('');
+  const [fromAddress, setFromAddress] = useState('');
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -65,6 +66,7 @@ const Trips = () => {
   const handleOpenAddModal = () => {
     setEditingTrip(null);
     setDriverId(drivers[0]?.id || '');
+    setFromAddress('Bangalore');
     setDestination('');
     setStartDate('');
     setEndDate('');
@@ -78,6 +80,7 @@ const Trips = () => {
   const handleOpenEditModal = (trip) => {
     setEditingTrip(trip);
     setDriverId(trip.driverId);
+    setFromAddress(trip.fromAddress || 'Bangalore');
     setDestination(trip.destination);
     setStartDate(trip.startDate);
     setEndDate(trip.endDate);
@@ -95,6 +98,7 @@ const Trips = () => {
 
     const payload = {
       driverId,
+      fromAddress,
       destination,
       startDate,
       endDate,
@@ -212,7 +216,7 @@ const Trips = () => {
           <table className="w-full border-collapse text-left text-sm">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-400 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-500">
-                <th className="px-6 py-4">Destination</th>
+                <th className="px-6 py-4">Route</th>
                 <th className="px-6 py-4">Assigned Driver</th>
                 <th className="px-6 py-4">Vehicle No</th>
                 <th className="px-6 py-4">Trip Dates</th>
@@ -234,7 +238,14 @@ const Trips = () => {
                     key={trip.id}
                     className="hover:bg-slate-50/50 dark:hover:bg-zinc-800/20 transition-colors"
                   >
-                    <td className="px-6 py-4 font-bold text-slate-800 dark:text-zinc-200">{trip.destination}</td>
+                    <td className="px-6 py-4 text-slate-800 dark:text-zinc-200">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-medium">
+                          {trip.fromAddress || 'Bangalore'} ➔
+                        </span>
+                        <span className="font-bold">{trip.destination}</span>
+                      </div>
+                    </td>
                     <td className="px-6 py-4 font-medium">{trip.driver?.name || 'Unassigned'}</td>
                     <td className="px-6 py-4 font-mono text-xs font-semibold tracking-wider text-slate-600 dark:text-zinc-400">{trip.vehicleNumber}</td>
                     <td className="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-zinc-400">
@@ -336,10 +347,21 @@ const Trips = () => {
                 </div>
               </div>
 
-              {/* Destination & Vehicle */}
+              {/* Route: From & Destination */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">Destination</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">From Address</label>
+                  <input
+                    type="text"
+                    required
+                    value={fromAddress}
+                    onChange={(e) => setFromAddress(e.target.value)}
+                    className="block w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white dark:border-zinc-800 dark:bg-zinc-950/40"
+                    placeholder="e.g. Bangalore"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">Destination Address</label>
                   <input
                     type="text"
                     required
@@ -349,6 +371,10 @@ const Trips = () => {
                     placeholder="e.g. Goa, Hyderabad"
                   />
                 </div>
+              </div>
+
+              {/* Vehicle Number & Advance Payment */}
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">Vehicle Number</label>
                   <div className="relative">
@@ -360,6 +386,21 @@ const Trips = () => {
                       onChange={(e) => setVehicleNumber(e.target.value)}
                       className="block w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-sm font-mono outline-none focus:border-blue-500 focus:bg-white dark:border-zinc-800 dark:bg-zinc-950/40"
                       placeholder="KA-01-XX-9999"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">Advance Payment (INR)</label>
+                  <div className="relative">
+                    <Landmark className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                    <input
+                      type="number"
+                      min="0"
+                      required
+                      value={advanceAmount}
+                      onChange={(e) => setAdvanceAmount(e.target.value)}
+                      className="block w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-sm font-bold outline-none focus:border-blue-500 focus:bg-white dark:border-zinc-800 dark:bg-zinc-950/40"
+                      placeholder="e.g. 15000"
                     />
                   </div>
                 </div>
@@ -395,22 +436,7 @@ const Trips = () => {
                 </div>
               </div>
 
-              {/* Advance Amount */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500 mb-2">Advance Payment (INR)</label>
-                <div className="relative">
-                  <Landmark className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                  <input
-                    type="number"
-                    min="0"
-                    required
-                    value={advanceAmount}
-                    onChange={(e) => setAdvanceAmount(e.target.value)}
-                    className="block w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-sm font-bold outline-none focus:border-blue-500 focus:bg-white dark:border-zinc-800 dark:bg-zinc-950/40"
-                    placeholder="e.g. 15000"
-                  />
-                </div>
-              </div>
+
 
               {editingTrip && (
                 <div>

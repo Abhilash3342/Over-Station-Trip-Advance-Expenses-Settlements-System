@@ -223,7 +223,7 @@ const Profile = () => {
             <table className="w-full border-collapse text-left text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 font-bold uppercase tracking-wider text-slate-400 dark:border-zinc-800 dark:bg-zinc-900/50">
-                  <th className="px-5 py-3">Destination</th>
+                  <th className="px-5 py-3">Route</th>
                   <th className="px-5 py-3">Vehicle</th>
                   <th className="px-5 py-3">Duration</th>
                   <th className="px-5 py-3">Advance Cash</th>
@@ -239,7 +239,14 @@ const Profile = () => {
                 ) : (
                   trips.map(trip => (
                     <tr key={trip.id} className="hover:bg-slate-50/50 dark:hover:bg-zinc-850/20">
-                      <td className="px-5 py-3 font-bold text-slate-800 dark:text-zinc-200">{trip.destination}</td>
+                      <td className="px-5 py-3 text-slate-800 dark:text-zinc-200">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-medium">
+                            {trip.fromAddress || 'Bangalore'} ➔
+                          </span>
+                          <span className="font-bold">{trip.destination}</span>
+                        </div>
+                      </td>
                       <td className="px-5 py-3 font-mono text-xs">{trip.vehicleNumber}</td>
                       <td className="px-5 py-3 text-xs">{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</td>
                       <td className="px-5 py-3">{formatCurrency(trip.advanceAmount)}</td>

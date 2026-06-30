@@ -200,7 +200,7 @@ const TripDetails = () => {
           </Link>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl flex items-center gap-2">
             <Compass className="h-7 w-7 text-blue-500" />
-            Trip to {trip.destination}
+            Trip: {trip.fromAddress || 'Bangalore'} ➔ {trip.destination}
           </h1>
         </div>
 
@@ -234,6 +234,14 @@ const TripDetails = () => {
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-premium dark:border-zinc-800 dark:bg-zinc-900 lg:col-span-2">
           <h2 className="text-md font-bold mb-4 border-b border-slate-100 pb-2 dark:border-zinc-800">Trip Details</h2>
           <div className="grid gap-4 sm:grid-cols-2 text-sm">
+            <div>
+              <span className="block text-xs font-semibold text-slate-400">From Address</span>
+              <span className="font-bold text-slate-800 dark:text-zinc-200">{trip.fromAddress || 'Bangalore'}</span>
+            </div>
+            <div>
+              <span className="block text-xs font-semibold text-slate-400">Destination</span>
+              <span className="font-bold text-slate-800 dark:text-zinc-200">{trip.destination}</span>
+            </div>
             <div>
               <span className="block text-xs font-semibold text-slate-400">Assigned Vehicle Number</span>
               <span className="font-mono font-bold text-slate-800 dark:text-zinc-200">{trip.vehicleNumber}</span>

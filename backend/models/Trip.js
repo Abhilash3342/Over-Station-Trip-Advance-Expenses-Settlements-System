@@ -17,6 +17,14 @@ const Trip = sequelize.define('Trip', {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   },
+  fromAddress: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'Office (Main Branch)',
+    validate: {
+      notEmpty: true,
+    },
+  },
   destination: {
     type: DataTypes.STRING,
     allowNull: false,

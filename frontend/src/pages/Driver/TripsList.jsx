@@ -82,7 +82,7 @@ const TripsList = () => {
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-zinc-850">
                   <div className="flex items-center gap-1.5 font-bold text-slate-800 dark:text-zinc-100">
                     <MapPin className="h-4 w-4 text-blue-500" />
-                    <span>To {trip.destination}</span>
+                    <span>{trip.fromAddress || 'Bangalore'} ➔ {trip.destination}</span>
                   </div>
                   <span className={`inline-flex rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getStatusColor(trip.status)}`}>
                     {trip.status}

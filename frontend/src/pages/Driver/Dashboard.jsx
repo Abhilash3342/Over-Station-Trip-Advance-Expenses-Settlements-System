@@ -113,7 +113,7 @@ const DriverDashboard = () => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg">
                   <MapPin className="h-5 w-5" />
-                  Route: Bangalore to {activeTrip.destination}
+                  Route: {activeTrip.fromAddress || 'Bangalore'} to {activeTrip.destination}
                 </div>
                 <div className="grid gap-x-6 gap-y-1 text-xs font-semibold text-slate-500 dark:text-zinc-400 sm:grid-cols-2">
                   <div>Vehicle Number: <span className="font-mono text-slate-700 dark:text-zinc-200">{activeTrip.vehicleNumber}</span></div>
@@ -156,7 +156,9 @@ const DriverDashboard = () => {
                   className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800"
                 >
                   <div>
-                    <h3 className="font-bold text-sm text-slate-800 dark:text-zinc-200">Destination: {trip.destination}</h3>
+                    <h3 className="font-bold text-sm text-slate-800 dark:text-zinc-200">
+                      Route: {trip.fromAddress || 'Bangalore'} ➔ {trip.destination}
+                    </h3>
                     <p className="text-xs text-slate-400 font-semibold mt-0.5">
                       Starts: {formatDate(trip.startDate)} • Vehicle: {trip.vehicleNumber}
                     </p>
@@ -187,7 +189,9 @@ const DriverDashboard = () => {
                   className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0 dark:border-zinc-800"
                 >
                   <div>
-                    <h3 className="font-bold text-sm text-slate-800 dark:text-zinc-200">To {trip.destination}</h3>
+                    <h3 className="font-bold text-sm text-slate-800 dark:text-zinc-200">
+                      {trip.fromAddress || 'Bangalore'} ➔ {trip.destination}
+                    </h3>
                     <p className="text-xs text-slate-400 font-semibold mt-0.5">
                       Ended: {formatDate(trip.endDate)} • Advance: {formatCurrency(trip.advanceAmount)}
                     </p>
