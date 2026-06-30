@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { API_URL } from '../../utils/api'; // Imported API_URL from your utils configuration
+import api, { API_URL, resolveReceiptUrl } from '../../utils/api'; // Imported API_URL from your utils configuration
 import { formatDate, formatCurrency, capitalize } from '../../utils/formatters';
 import { Eye, Check, X, FileImage, ClipboardList, RefreshCw } from 'lucide-react';
 
@@ -219,10 +219,7 @@ const Expenses = () => {
             {previewExpense.receiptUrl ? (
               <div className="flex max-h-96 items-center justify-center rounded-xl bg-slate-100 p-4 dark:bg-zinc-950 border border-slate-200/50 dark:border-zinc-800 overflow-hidden">
                 <img
-                  src={previewExpense.receiptUrl?.startsWith('http') || previewExpense.receiptUrl?.startsWith('data:')
-                    ? previewExpense.receiptUrl 
-                    : `${API_URL}${previewExpense.receiptUrl?.startsWith('/') ? '' : '/'}${previewExpense.receiptUrl}`
-                  }
+                  src={resolveReceiptUrl(previewExpense.receiptUrl)}
                   alt="Receipt upload"
                   className="max-h-80 w-auto max-w-full rounded-lg object-contain shadow-sm"
                 />

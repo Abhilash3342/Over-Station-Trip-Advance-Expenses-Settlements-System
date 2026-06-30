@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import api, { API_URL } from '../../utils/api';
+import api, { API_URL, resolveReceiptUrl } from '../../utils/api';
 import { formatCurrency, formatDate, getStatusColor, capitalize } from '../../utils/formatters';
 import { 
   ArrowLeft, 
@@ -382,9 +382,7 @@ const TripDetails = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              const resolvedUrl = expense.receiptUrl.startsWith('http') || expense.receiptUrl.startsWith('data:')
-                                ? expense.receiptUrl
-                                : `${API_URL}${expense.receiptUrl.startsWith('/') ? '' : '/'}${expense.receiptUrl}`;
+                               const resolvedUrl = resolveReceiptUrl(expense.receiptUrl);
                               setViewReceiptModalUrl(resolvedUrl);
                             }}
                             className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"

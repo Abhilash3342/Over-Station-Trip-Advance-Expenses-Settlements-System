@@ -12,6 +12,25 @@ export const API_URL = import.meta.env.DEV
   ? ''
   : (productionApiUrl || '');
 
+export const resolveReceiptUrl = (receiptUrl) => {
+  if (!receiptUrl) return '';
+  if (receiptUrl.startsWith('http') || receiptUrl.startsWith('data:')) {
+    return receiptUrl;
+  }
+  
+  if (API_URL) {
+    return `${API_URL}${receiptUrl.startsWith('/') ? '' : '/'}${receiptUrl}`;
+  }
+  
+  // Static demo fallback on GitHub Pages
+  if (window.location.hostname.includes('github.io')) {
+    const repoName = 'Over-Station-Trip-Advance-Expenses-Settlements-System';
+    return `https://raw.githubusercontent.com/Abhilash3342/${repoName}/main/backend${receiptUrl.startsWith('/') ? '' : '/'}${receiptUrl}`;
+  }
+  
+  return receiptUrl;
+};
+
 const request = async (method, path, body = null, isMultipart = false) => {
   const token = localStorage.getItem('token');
   const headers = {};
